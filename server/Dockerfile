@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as the base image
-FROM node:latest
+FROM node:alpine
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm install
 
 # Rebuild bcrypt
-RUN npm rebuild bcrypt --build-from-source
+# RUN npm rebuild bcrypt --build-from-source
 
 # Copy the rest of the code into the container
 COPY . .
