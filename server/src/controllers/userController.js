@@ -4,7 +4,14 @@ const jwt = require('../utils/jwtHelper');
 
 exports.register = async (req, res) => {
     try {
+        if (!req.body.password) {
+            return res.json({ status: 'error', error: 'Password is null' });
+        }
         const hashedPassword = await bcrypt.hashPassword(req.body.password);
+        
+        // Debug log to check what is actually being saved
+        console.log('Hashed Password:', hashedPassword);
+        
         await User.create({
             name: req.body.name,
             email: req.body.email,

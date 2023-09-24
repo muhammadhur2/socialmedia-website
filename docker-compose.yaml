@@ -7,11 +7,11 @@ services:
     depends_on:
       - mongo
     env_file:
-      - ./server/.env
+      - ./server/.env.docker
   mongo:
     image: mongo:latest
     ports:
-      - "27018:27018"
+      - "27017:27017"
     volumes:
       - mongo_db:/data/db
     environment:

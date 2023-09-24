@@ -19,13 +19,15 @@ const LoginSignup = () => {
     setAction("Login");
     try {
       const response = await axios.post('http://localhost:3001/api/login', { email, password });
+      console.log(`Login status: ${response.data.status}`); // Print status to console
       if (response.data.status === 'ok') {
-        console.log('Login Success:', response);
+        window.alert('Login Successful');
       } else {
-        console.log('Login Failed:', response);
+        window.alert('Login Failed');
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.log('An error occurred during login:', error); // Print error to console
+      window.alert('An error occurred');
     }
   };
   
@@ -33,15 +35,18 @@ const LoginSignup = () => {
     setAction("Sign Up");
     try {
       const response = await axios.post('http://localhost:3001/api/register', { name, email, password });
+      console.log(`Signup status: ${response.data.status}`); // Print status to console
       if (response.data.status === 'ok') {
-        console.log('Registration Success:', response);
+        window.alert('Signup Successful');
       } else {
-        console.log('Registration Failed:', response);
+        window.alert('Signup Failed');
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.log('An error occurred during signup:', error); // Print error to console
+      window.alert('An error occurred');
     }
   };
+  
 
   return (
     <div className='container'>
