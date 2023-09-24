@@ -1,5 +1,5 @@
-` My Full-Stack Project `
-`` Overview ``
+# My Full-Stack Project #
+## Overview ##
 This project is a full-stack application featuring:
 
 Frontend built with React (Located in the /client folder)
@@ -7,7 +7,7 @@ Backend API built with Node.js (Located in the /server folder)
 MongoDB server for the database
 Docker Compose for containerization and orchestration
 
-`` Project Structure ``
+## Project Structure ##
 ```plaintext
 .
 ├── client # Frontend React App
@@ -17,15 +17,15 @@ Docker Compose for containerization and orchestration
 └── docker-compose.yaml # Docker Compose file
 ```
 
-``Prerequisites``
+## Prerequisites ##
 Node.js
 Docker
 Docker Compose
 
 
-``Setup and Usage``
-```Without Docker```
-```Frontend Setup```
+## Setup and Usage ##
+### Without Docker ###
+### Frontend Setup ###
 
 Navigate to the client folder and run:
 
@@ -36,7 +36,7 @@ npm start
 
 The React app will start and can be accessed at http://localhost:3000.
 
-```Backend Setup```
+### Backend Setup ###
 
 Navigate to the server folder and run:
 
@@ -47,8 +47,8 @@ npm start
 
 The Node.js API will start and can be accessed at http://localhost:3001.
 
-```With Docker Compose```
-```Build and Start Containers```
+### With Docker Compose ###
+### Build and Start Containers ### 
 
 From the project root, run:
 
@@ -58,7 +58,7 @@ docker-compose up --build
 
 This will start the React app, the Node.js API, and the MongoDB server in individual containers.
 
-``Contributing``
+## Contributing ##
 To contribute to this project:
 
 Fork the repository
@@ -67,5 +67,5 @@ Commit your changes (`git commit -am 'Add some fooBar'`)
 Push to the branch (`git push origin feature/fooBar`)
 Create a new pull request
 
-``License``
+## License ##
 This project is licensed under the MIT License.
