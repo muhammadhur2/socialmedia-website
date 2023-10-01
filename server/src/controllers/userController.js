@@ -82,3 +82,24 @@ exports.updateProfile = async (req, res) => {
     }
 };
 
+exports.deleteAccount = async (req, res) => {
+    try {
+      // Extract user ID from verified JWT token
+      const userId = req.user.id;
+      console.log('User ID:', userId);  // Debugging line
+  
+      // Delete user from database
+      const deletedUser = await User.findByIdAndDelete(userId);
+      
+      if (deletedUser) {
+        res.status(200).json({ message: 'Account deleted successfully' });
+      } else {
+        console.log('User not found');  // Debugging line
+        res.status(404).json({ error: 'User not found' });
+      }
+    } catch (err) {
+      console.log('Error:', err);  // Debugging line
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+  

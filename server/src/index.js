@@ -4,8 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('./config/mongoose');
 const userRoutes = require('./routes/userRoutes');
-const { updateProfile, getProfile } = require('./controllers/userController');
-const { verifyToken } = require('./utils/jwtHelper');
+// const { updateProfile, getProfile } = require('./controllers/userController');
+// const { verifyToken } = require('./utils/jwtHelper');
 
 const app = express();
 
@@ -14,9 +14,9 @@ app.use(express.json());
 
 mongoose.connect();
 
-// Define specific routes before the general /api route
-app.use('/api/profile', verifyToken, getProfile);
-app.put('/api/updateProfile', verifyToken, updateProfile);
+// // Define specific routes before the general /api route
+// app.use('/api/profile', verifyToken, getProfile);
+// app.put('/api/updateProfile', verifyToken, updateProfile);
 
 // Then, define the general route
 app.use('/api', userRoutes);
