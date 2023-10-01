@@ -7,6 +7,13 @@ Backend API built with Node.js (Located in the /server folder)
 MongoDB server for the database
 Docker Compose for containerization and orchestration
 
+## Api Endpoints ##
+`POST /register`: Registers a new user
+`POST /login`: Logs in a user
+`GET /profile`: Retrieves the user profile (requires JWT token)
+`PUT /updateProfile`: Updates the user profile (requires JWT token)
+`DELETE /deleteAccount`: Deletes the user account (requires JWT token)
+
 ## Project Structure ##
 ```plaintext
 .
