@@ -9,11 +9,18 @@ Docker Compose for containerization and orchestration
 
 ## API Endpoints
 
-- `POST /api/register`: Registers a new user
-- `POST /api/login`: Logs in a user
-- `GET /api/profile`: Retrieves the user profile (requires JWT token)
-- `PUT /api/updateProfile`: Updates the user profile (requires JWT token)
-- `DELETE /api/deleteAccount`: Deletes the user account (requires JWT token)
+### Authentication
+- `POST /users/register`: Registers a new user
+- `POST /users/login`: Logs in a user
+- `GET /users/profile`: Retrieves the user profile (requires JWT token)
+- `PUT /users/updateProfile`: Updates the user profile (requires JWT token)
+- `DELETE /users/deleteAccount`: Deletes the user account (requires JWT token)
+
+### Posts
+- `POST /posts/createpost`: Create post (requires JWT token)
+- `GET /posts/getposts`: Get posts (requires JWT token)
+- `DELETE /deletepost/:id`: Deletes the posts (requires JWT token)
+
 
 
 ## Project Structure ##
