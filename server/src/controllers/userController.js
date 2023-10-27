@@ -103,3 +103,90 @@ exports.deleteAccount = async (req, res) => {
     }
   };
   
+
+exports.sendFriendRequest = async (req, res) => {
+    const friendId = req.body.friendId;
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+    const friend = await User.findById(req.body.friendId);
+  
+    if (!friend) {
+      return res.json({ status: 'error', error: 'Friend not found' });
+    }
+    
+    user.outgoingRequests.push(friendId);
+    friend.incomingRequests.push(userId);
+    
+    await user.save();
+    await friend.save();
+    
+    res.json({ status: 'ok' });
+  };
+  
+  exports.acceptFriendRequest = async (req, res) => {
+    const friendId = req.body.friendId;
+    const userId = req.user.id;
+  
+    const user = await User.findById(userId);
+    const friend = await User.findById(friendId);
+  
+    if (!friend || !user.incomingRequests.includes(friendId)) {
+      return res.json({ status: 'error', error: 'Invalid request' });
+    }
+  
+    user.friends.push(friendId);
+    user.incomingRequests.pull(friendId);
+    
+    friend.friends.push(userId);
+    friend.outgoingRequests.pull(userId);
+  
+    await user.save();
+    await friend.save();
+  
+    res.json({ status: 'ok' });
+  };
+  
+  exports.rejectFriendRequest = async (req, res) => {
+    const friendId = req.body.friendId;
+    const userId = req.user.id;
+    
+    const user = await User.findById(userId);
+    const friend = await User.findById(friendId);
+    
+    if (!friend || !user.incomingRequests.includes(friendId)) {
+      return res.json({ status: 'error', error: 'Invalid request' });
+    }
+    
+    user.incomingRequests.pull(friendId);
+    friend.outgoingRequests.pull(userId);
+    
+    await user.save();
+    await friend.save();
+    
+    res.json({ status: 'ok' });
+  };
+  
+  exports.listFriends = async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const user = await User.findById(userId).populate('friends', '-password');
+      
+      res.json({ status: 'ok', friends: user.friends });
+    } catch (err) {
+      console.log(err);
+      res.json({ status: 'error', error: 'Error listing friends' });
+    }
+  };
+
+  exports.listFriendRequests = async (req, res) => {
+    const userId = req.user.id;
+  
+    const user = await User.findById(userId)
+                             .populate('incomingRequests', 'name email -_id');  // Only get name and email of the friends
+    
+    if (!user) {
+      return res.json({ status: 'error', error: 'User not found' });
+    }
+  
+    res.json({ status: 'ok', incomingRequests: user.incomingRequests });
+  };

@@ -10,4 +10,12 @@ router.get('/profile', verifyToken, getProfile);
 router.put('/updateProfile', verifyToken, updateProfile);
 router.delete('/deleteAccount', verifyToken, deleteAccount);
 
+
+router.post('/sendfriendrequest', verifyToken, userController.sendFriendRequest);
+router.post('/acceptfriendrequest', verifyToken, userController.acceptFriendRequest);
+router.post('/rejectfriendrequest', verifyToken, userController.rejectFriendRequest);
+router.get('/listfriends', verifyToken, userController.listFriends);
+router.get('/listfriendrequests', verifyToken, userController.listFriendRequests);
+
+
 module.exports = router;
