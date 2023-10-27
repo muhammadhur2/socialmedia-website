@@ -1,0 +1,36 @@
+const Post = require('../models/post.model');
+
+exports.createPost = async (req, res) => {
+  try {
+    const newPost = await Post.create({
+      title: req.body.title,
+      content: req.body.content,
+      author: req.user.id,
+    });
+    res.json({ status: 'ok', post: newPost });
+  } catch (err) {
+    console.log(err);
+    res.json({ status: 'error', error: 'Post creation failed' });
+  }
+};
+
+exports.getPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({});
+    res.json({ status: 'ok', posts });
+  } catch (err) {
+    console.log(err);
+    res.json({ status: 'error', error: 'Could not retrieve posts' });
+  }
+};
+
+exports.deletePost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    await Post.findByIdAndDelete(postId);
+    res.json({ status: 'ok', message: 'Post deleted' });
+  } catch (err) {
+    console.log(err);
+    res.json({ status: 'error', error: 'Post deletion failed' });
+  }
+};
