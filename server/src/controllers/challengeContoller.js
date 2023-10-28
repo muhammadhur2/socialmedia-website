@@ -11,27 +11,37 @@ exports.createChallenge = async (req, res) => {
   }
 };
 
-// List all Challenges
 // List all Challenges with Filters
 exports.listChallenges = async (req, res) => {
-  try {
-    const query = {};
-    if (req.query.complexity) {
-      query.complexity = req.query.complexity;
+    try {
+      const query = {};
+      
+      console.log("Incoming query: ", req.query); // Debugging line
+      
+      // Handle multiple complexities
+      if (Array.isArray(req.query.complexity)) {
+        query.complexity = { $in: req.query.complexity.map(item => item.trim()) };
+      } else if (req.query.complexity) {
+        query.complexity = req.query.complexity.trim();
+      }
+      
+      // Handle multiple tags
+      if (Array.isArray(req.query.tag)) {
+        query.tags = { $in: req.query.tag.map(item => item.trim()) };
+      } else if (req.query.tag) {
+        query.tags = req.query.tag.trim();
+      }
+  
+      console.log("Final MongoDB query: ", query); // Debugging line
+      
+      const challenges = await Challenge.find(query);
+      res.status(200).json({ challenges });
+    } catch (error) {
+      res.status(400).json({ message: "Error fetching challenges", error });
     }
-    if (req.query.tag) {
-      query.tags = { $in: [].concat(req.query.tag) };
-    }
-    if (req.query.author) {
-      query.author = req.query.author;
-    }
-    const challenges = await Challenge.find(query);
-    res.status(200).json({ challenges });
-  } catch (error) {
-    res.status(400).json({ message: "Error fetching challenges", error });
-  }
-};
-
+  };
+  
+  
 
 // Get Challenge by ID
 exports.getChallengeById = async (req, res) => {
