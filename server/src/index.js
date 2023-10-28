@@ -5,6 +5,7 @@ const cors = require('cors');
 const mongoose = require('./config/mongoose');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
+const challengeRoutes = require('./routes/challengeRoutes')
 // const { updateProfile, getProfile } = require('./controllers/userController');
 // const { verifyToken } = require('./utils/jwtHelper');
 
@@ -19,6 +20,7 @@ mongoose.connect();
 // Then, define the general route
 app.use('/users', userRoutes);
 app.use('/posts', postRoutes);
+app.use('/challenges', challengeRoutes);
 
 app.get('/hello', (req, res) => {
     res.send('Hello World');
