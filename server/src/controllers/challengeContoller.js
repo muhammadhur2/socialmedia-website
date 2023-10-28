@@ -12,14 +12,26 @@ exports.createChallenge = async (req, res) => {
 };
 
 // List all Challenges
+// List all Challenges with Filters
 exports.listChallenges = async (req, res) => {
   try {
-    const challenges = await Challenge.find({});
+    const query = {};
+    if (req.query.complexity) {
+      query.complexity = req.query.complexity;
+    }
+    if (req.query.tag) {
+      query.tags = { $in: [].concat(req.query.tag) };
+    }
+    if (req.query.author) {
+      query.author = req.query.author;
+    }
+    const challenges = await Challenge.find(query);
     res.status(200).json({ challenges });
   } catch (error) {
     res.status(400).json({ message: "Error fetching challenges", error });
   }
 };
+
 
 // Get Challenge by ID
 exports.getChallengeById = async (req, res) => {
@@ -50,3 +62,35 @@ exports.deleteChallenge = async (req, res) => {
     res.status(400).json({ message: "Error deleting challenge", error });
   }
 };
+
+exports.getChallengesByTag = async (req, res) => {
+    try {
+      const tag = req.params.tag;
+      const challenges = await Challenge.find({ tags: tag });
+      res.status(200).json({ challenges });
+    } catch (error) {
+      res.status(400).json({ message: "Error fetching challenges by tag", error });
+    }
+  };
+  
+  // Get Challenges by Author
+  exports.getChallengesByAuthor = async (req, res) => {
+    try {
+      const authorId = new mongoose.Types.ObjectId(req.params.authorId);
+      const challenges = await Challenge.find({ author: authorId });
+      res.status(200).json({ challenges });
+    } catch (error) {
+      res.status(400).json({ message: "Error fetching challenges by author", error });
+    }
+  };
+  
+  // Get Challenges by Complexity
+  exports.getChallengesByComplexity = async (req, res) => {
+    try {
+      const complexity = req.params.complexity;
+      const challenges = await Challenge.find({ complexity });
+      res.status(200).json({ challenges });
+    } catch (error) {
+      res.status(400).json({ message: "Error fetching challenges by complexity", error });
+    }
+  };

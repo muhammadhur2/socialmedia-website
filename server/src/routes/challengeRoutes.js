@@ -9,4 +9,12 @@ router.get('/:id', challengeController.getChallengeById);
 router.put('/update/:id', challengeController.updateChallenge);
 router.delete('/delete/:id', challengeController.deleteChallenge);
 
+
+
+
+router.get('/byTag/:tag', challengeController.getChallengesByTag);
+router.get('/byAuthor/:authorId', challengeController.getChallengesByAuthor);
+router.get('/byComplexity/:complexity', challengeController.getChallengesByComplexity);
+
+
 module.exports = router;
