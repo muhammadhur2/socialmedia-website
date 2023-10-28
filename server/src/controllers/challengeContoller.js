@@ -16,7 +16,7 @@ exports.listChallenges = async (req, res) => {
     try {
       const query = {};
       
-      console.log("Incoming query: ", req.query); // Debugging line
+      console.log("Incoming query: ", req.query); 
       
       // Handle multiple complexities
       if (Array.isArray(req.query.complexity)) {
@@ -32,7 +32,7 @@ exports.listChallenges = async (req, res) => {
         query.tags = req.query.tag.trim();
       }
   
-      console.log("Final MongoDB query: ", query); // Debugging line
+      console.log("Final MongoDB query: ", query); 
       
       const challenges = await Challenge.find(query);
       res.status(200).json({ challenges });
