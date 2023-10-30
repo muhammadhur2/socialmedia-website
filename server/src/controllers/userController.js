@@ -29,25 +29,26 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-    try {
+  try {
       console.log(req.body);
 
-        const user = await User.findOne({ email: req.body.email });
-        if (user) {
-            const match = await bcrypt.comparePassword(req.body.password, user.password);
-            if (match) {
-                const token = jwt.generateToken(user);
-                return res.json({ status: 'ok', user: token });
-            } else {
-                return res.json({ status: 'error', user: false });
-            }
-        } else {
-            return res.json({ status: 'error', user: false });
-        }
-    } catch (err) {
-        res.json({ status: 'error', error: 'Error' });
-    }
+      const user = await User.findOne({ email: req.body.email });
+      if (user) {
+          const match = await bcrypt.comparePassword(req.body.password, user.password);
+          if (match) {
+              const token = jwt.generateToken(user);
+              return res.json({ status: 'ok', token });
+          } else {
+              return res.json({ status: 'error', message: 'Incorrect password' });
+          }
+      } else {
+          return res.json({ status: 'error', message: 'User not found' });
+      }
+  } catch (err) {
+      res.json({ status: 'error', message: 'Internal server error' });
+  }
 };
+
 
 
 exports.getProfile = async (req, res) => {
