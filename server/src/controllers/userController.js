@@ -5,6 +5,7 @@ const { verifyToken } = require('../utils/jwtHelper');
 
 exports.register = async (req, res) => {
     try {
+      console.log(req.body);
         if (!req.body.password) {
             return res.json({ status: 'error', error: 'Password is null' });
         }
@@ -29,6 +30,8 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
+      console.log(req.body);
+
         const user = await User.findOne({ email: req.body.email });
         if (user) {
             const match = await bcrypt.comparePassword(req.body.password, user.password);

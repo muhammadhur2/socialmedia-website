@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'; // Make sure to install this package
 import './LoginSignup.css'
+import userService from '../../Services/UserService';
 
 import user_icon from '../Assets/person.png'
 import email_icon from '../Assets/email.png'
@@ -18,39 +19,34 @@ const LoginSignup = () => {
   const handleLogin = async () => {
     setAction("Login");
     try {
-      const response = await axios.post('http://localhost:3001/users/login', { email, password });
-      console.log(`Login status: ${response.data.status}`); // Print status to console
-      console.log(`Login status: `,response); // Print status to console
-
-      if (response.data.status === 'ok') {
+      const response = await userService.login({ email, password });
+      const responseData = response.data;
+      if (responseData.status === 'ok') {
         window.alert('Login Successful');
       } else {
         window.alert('Login Failed');
       }
     } catch (error) {
-      console.log('An error occurred during login:', error); // Print error to console
-      window.alert('An error occurred');
+      window.alert('An error occurred during login');
     }
   };
   
   const handleSignup = async () => {
     setAction("Sign Up");
     try {
-      const response = await axios.post('http://localhost:3001/users/register', { name, email, password });
-      console.log(`Signup status: ${response.data.status}`); // Print status to console
-      if (response.data.status === 'ok') {
+      const response = await userService.register({ name, email, password });
+      console.log(response);
+      const responseData = response.data;
+      if (responseData.status === 'ok') {
         window.alert('Signup Successful');
       } else {
         window.alert('Signup Failed');
       }
     } catch (error) {
-      console.log('An error occurred during signup:', error); // Print error to console
-      
-      window.alert('An error occurred during signup:', error.message);
+      window.alert('An error occurred during signup',error);
     }
   };
   
-
   return (
     <div className='container'>
       <div className='header'>
