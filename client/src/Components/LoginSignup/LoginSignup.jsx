@@ -18,7 +18,7 @@ const LoginSignup = () => {
   const handleLogin = async () => {
     setAction("Login");
     try {
-      const response = await axios.post('http://localhost:3001/api/login', { email, password });
+      const response = await axios.post('http://localhost:3001/users/login', { email, password });
       console.log(`Login status: ${response.data.status}`); // Print status to console
       if (response.data.status === 'ok') {
         window.alert('Login Successful');
@@ -34,7 +34,7 @@ const LoginSignup = () => {
   const handleSignup = async () => {
     setAction("Sign Up");
     try {
-      const response = await axios.post('http://localhost:3001/api/register', { name, email, password });
+      const response = await axios.post('http://localhost:3001/users/register', { name, email, password });
       console.log(`Signup status: ${response.data.status}`); // Print status to console
       if (response.data.status === 'ok') {
         window.alert('Signup Successful');
