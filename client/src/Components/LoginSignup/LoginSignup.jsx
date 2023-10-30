@@ -18,8 +18,10 @@ const LoginSignup = () => {
   const handleLogin = async () => {
     setAction("Login");
     try {
-      const response = await axios.post('http://localhost:3001/api/login', { email, password });
+      const response = await axios.post('http://localhost:3001/users/login', { email, password });
       console.log(`Login status: ${response.data.status}`); // Print status to console
+      console.log(`Login status: `,response); // Print status to console
+
       if (response.data.status === 'ok') {
         window.alert('Login Successful');
       } else {
@@ -34,7 +36,7 @@ const LoginSignup = () => {
   const handleSignup = async () => {
     setAction("Sign Up");
     try {
-      const response = await axios.post('http://localhost:3001/api/register', { name, email, password });
+      const response = await axios.post('http://localhost:3001/users/register', { name, email, password });
       console.log(`Signup status: ${response.data.status}`); // Print status to console
       if (response.data.status === 'ok') {
         window.alert('Signup Successful');
@@ -43,7 +45,8 @@ const LoginSignup = () => {
       }
     } catch (error) {
       console.log('An error occurred during signup:', error); // Print error to console
-      window.alert('An error occurred');
+      
+      window.alert('An error occurred during signup:', error.message);
     }
   };
   
