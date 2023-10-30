@@ -5,12 +5,15 @@ const { verifyToken } = require('../utils/jwtHelper');
 
 exports.register = async (req, res) => {
     try {
+      console.log(req.body);
         if (!req.body.password) {
             return res.json({ status: 'error', error: 'Password is null' });
         }
         const hashedPassword = await bcrypt.hashPassword(req.body.password);
         
         // Debug log to check what is actually being saved
+                // Debug log to check what is actually being saved
+
         console.log('Hashed Password:', hashedPassword);
         
         await User.create({
@@ -27,6 +30,8 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
+      console.log(req.body);
+
         const user = await User.findOne({ email: req.body.email });
         if (user) {
             const match = await bcrypt.comparePassword(req.body.password, user.password);
