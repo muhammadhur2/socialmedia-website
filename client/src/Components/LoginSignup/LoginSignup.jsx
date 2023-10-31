@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import axios from 'axios'; // Make sure to install this package
 import './LoginSignup.css'
 import userService from '../../Services/UserService';
@@ -6,28 +8,41 @@ import userService from '../../Services/UserService';
 import user_icon from '../Assets/person.png'
 import email_icon from '../Assets/email.png'
 import password_icon from '../Assets/password.png'
+import UserContext from '../../UserContext';
 
 
 
 
 const LoginSignup = () => {
+  const navigate = useNavigate();
   const [action, setAction] = useState("Login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const { setUser } = useContext(UserContext);
 
   const handleLogin = async () => {
     setAction("Login");
     try {
-      const response = await userService.login({ email, password });
-      const responseData = response.data;
-      if (responseData.status === 'ok') {
+        const responseData = await userService.login({ email, password }); // Just directly get the responseData
+        if (responseData.status === 'ok') {
+        localStorage.setItem('token', responseData.token);
+        console.log("Received token:", responseData.token);
+        console.log("setUser method:", setUser);
+        // Set user context here
+        setUser({
+          token: responseData.token
+          // You can also set other user data if it's provided in the response.
+        });
+
         window.alert('Login Successful');
+        navigate('/profile');  // Redirect to the profile page
       } else {
         window.alert('Login Failed');
       }
     } catch (error) {
-      window.alert('An error occurred during login');
+      console.error("Login Error:", error.message); // Log the actual error message to the console
+      window.alert('An error occurred during login: ' + error.message); // Provide the error message in the alert
     }
   };
   

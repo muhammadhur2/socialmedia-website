@@ -14,8 +14,13 @@ exports.generateToken = (user) => {
 
 
 exports.verifyToken = (req, res, next) => {
-    const token = req.header('Authorization'); // Using req.header('Authorization')
-    console.log(token)
+    const bearerHeader = req.header('Authorization');
+    if (!bearerHeader) {
+    return res.status(401).json({ status: 'error', error: 'Token missing' });
+    }
+
+// Extract the token from the Bearer string.
+    const token = bearerHeader.split(' ')[1];
     if (!token) {
         return res.status(401).json({ status: 'error', error: 'Token missing' });
     }
