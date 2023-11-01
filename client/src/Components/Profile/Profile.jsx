@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import userService from '../../Services/UserService';
 import UserContext from '../../UserContext';
+import './Profile.css';
 
 const Profile = () => {
   const { user, setUser } = useContext(UserContext);
@@ -25,9 +26,7 @@ const Profile = () => {
     fetchProfile();
   }, [user]);
 
-  const handleEdit = () => {
-    setIsEditing(!isEditing);
-  };
+  const handleEdit = () => setIsEditing(!isEditing);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,17 +47,21 @@ const Profile = () => {
   };
 
   return (
-    <div>
+    <div className="profile-container">
       {isEditing ? (
-        <>
+        <div className="profile-edit">
           <h2>Edit Profile</h2>
+          <label htmlFor="name">Name</label>
           <input
+            id="name"
             type="text"
             name="name"
             value={editData.name}
             onChange={handleInputChange}
           />
+          <label htmlFor="email">Email</label>
           <input
+            id="email"
             type="email"
             name="email"
             value={editData.email}
@@ -66,13 +69,13 @@ const Profile = () => {
           />
           <button onClick={handleUpdate}>Save Changes</button>
           <button onClick={handleEdit}>Cancel</button>
-        </>
+        </div>
       ) : profileData ? (
-        <>
+        <div className="profile-view">
           <h2>{profileData.name}'s Profile</h2>
-          <p>Email: {profileData.email}</p>
+          <p><strong>Email:</strong> {profileData.email}</p>
           <button onClick={handleEdit}>Edit Profile</button>
-        </>
+        </div>
       ) : (
         <p>Loading...</p>
       )}

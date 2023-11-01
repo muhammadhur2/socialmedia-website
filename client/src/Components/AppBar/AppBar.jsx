@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import UserContext from '../../UserContext';  // Adjust path as needed
+import UserContext from '../../UserContext'; // Adjust path as needed
+import './AppBar.css';
 
 const AppBar = () => {
   const { setUser } = useContext(UserContext);
@@ -14,7 +15,9 @@ const AppBar = () => {
 
   return (
     <div className="app-bar">
-      <button onClick={handleSignOut}>Sign Out</button>
+      <div className="app-bar-container">
+        <button className="sign-out-button" onClick={handleSignOut}>Sign Out</button>
+      </div>
     </div>
   );
 };
