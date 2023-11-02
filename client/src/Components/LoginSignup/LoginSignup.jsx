@@ -20,9 +20,14 @@ const LoginSignup = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const { setUser } = useContext(UserContext);
+  const [submit, setsubmit] = useState(false);
+
 
   const handleLogin = async () => {
+    if(action == "Sign Up"){
     setAction("Login");
+    return;
+    }
     try {
         const responseData = await userService.login({ email, password }); // Just directly get the responseData
         if (responseData.status === 'ok') {
@@ -47,7 +52,10 @@ const LoginSignup = () => {
   };
   
   const handleSignup = async () => {
+    if(action == "Login"){
     setAction("Sign Up");
+    return;
+    }
     try {
       const response = await userService.register({ name, email, password });
       console.log(response);
