@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import userService from '../../Services/UserService';
 import UserContext from '../../UserContext';
+import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 
 const Profile = () => {
@@ -8,6 +9,7 @@ const Profile = () => {
   const [profileData, setProfileData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({ name: '', email: '' });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -46,41 +48,75 @@ const Profile = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    // Confirm with the user before deleting the account
+    if (window.confirm('Are you sure you want to delete your account? This cannot be undone.')) {
+      try {
+        const response = await userService.deleteAccount(user.token);
+        console.log("Response from deleteAccount:", response.data);
+        if (response.data.status === 'ok') {
+          console.log("Removing token from localStorage");
+          localStorage.removeItem('token');
+          
+          console.log("Setting user to null");
+          setUser(null);
+          
+          console.log("Navigating to login");
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error("Error deleting account", error);
+      }
+    }
+  };
+  
+  
+
   return (
-    <div className="profile-container">
-      {isEditing ? (
+    <div className="container">
+      <div className='header'>
+        <div className='text'>{isEditing ? 'Edit Profile' : `${profileData ? profileData.name + "'s Profile" : ''}`}</div>
+        <div className='underline'></div>
+      </div>
+      <div className='profile-content'>
+        {isEditing ? (
         <div className="profile-edit">
-          <h2>Edit Profile</h2>
-          <label htmlFor="name">Name</label>
-          <input
-            id="name"
-            type="text"
-            name="name"
-            value={editData.name}
-            onChange={handleInputChange}
-          />
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            value={editData.email}
-            onChange={handleInputChange}
-          />
-          <button onClick={handleUpdate}>Save Changes</button>
-          <button onClick={handleEdit}>Cancel</button>
-        </div>
-      ) : profileData ? (
-        <div className="profile-view">
-          <h2>{profileData.name}'s Profile</h2>
-          <p><strong>Email:</strong> {profileData.email}</p>
-          <button onClick={handleEdit}>Edit Profile</button>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+        <h2>Edit Profile</h2>
+        <label htmlFor="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          name="name"
+          value={editData.name}
+          onChange={handleInputChange}
+        />
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          value={editData.email}
+          onChange={handleInputChange}
+        />
+<button onClick={handleUpdate} className="save-changes">Save Changes</button>
+        <button onClick={handleEdit} className="cancel">Cancel</button>
+      </div>
+    
+        ) : profileData ? (
+          <div className="profile-view">
+            <p><strong>Email:</strong> {profileData.email}</p>
+            <div className="profile-actions">
+              <button onClick={handleEdit} className="submit">Edit Profile</button>
+              <button onClick={handleDeleteAccount} className="danger">Delete Account</button>
+            </div>
+          </div>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
     </div>
   );
 };
 
 export default Profile;
+

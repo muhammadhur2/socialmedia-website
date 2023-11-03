@@ -98,11 +98,11 @@ exports.deleteAccount = async (req, res) => {
       const deletedUser = await User.findByIdAndDelete(userId);
       
       if (deletedUser) {
-        res.status(200).json({ message: 'Account deleted successfully' });
+        res.status(200).json({ status: 'ok', message: 'Account deleted successfully' });
       } else {
         console.log('User not found');  // Debugging line
         res.status(404).json({ error: 'User not found' });
-      }
+      }      
     } catch (err) {
       console.log('Error:', err);  // Debugging line
       res.status(500).json({ error: 'Internal Server Error' });

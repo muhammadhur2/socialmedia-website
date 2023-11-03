@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Make sure to install this package
 import './LoginSignup.css'
 import userService from '../../Services/UserService';
+import { isValidEmail, isValidPassword, isValidName } from '../../utils/Validation';
 
 import user_icon from '../Assets/person.png'
 import email_icon from '../Assets/email.png'
@@ -60,6 +61,18 @@ const LoginSignup = () => {
       const response = await userService.register({ name, email, password });
       console.log(response);
       const responseData = response.data;
+      if (!isValidName(name)) {
+        window.alert('Name should be at least 2 characters.');
+        return;
+    }
+    if (!isValidEmail(email)) {
+        window.alert('Please enter a valid email address.');
+        return;
+    }
+    if (!isValidPassword(password)) {
+        window.alert('Password should be at least 6 characters long.');
+        return;
+    }
       if (responseData.status === 'ok') {
         window.alert('Signup Successful');
       } else {
