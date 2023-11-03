@@ -2,13 +2,14 @@ import React, { useContext, useState, useEffect } from 'react';
 import userService from '../../Services/UserService';
 import UserContext from '../../UserContext';
 import { useNavigate } from 'react-router-dom';
+import { isValidEmail, isValidPassword, isValidName } from '../../utils/Validation';
 import './Profile.css';
 
 const Profile = () => {
   const { user, setUser } = useContext(UserContext);
   const [profileData, setProfileData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editData, setEditData] = useState({ name: '', email: '' });
+  const [editData, setEditData] = useState({ name: '', email: '', newPassword: '', confirmPassword: '' });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,6 +39,24 @@ const Profile = () => {
   const handleUpdate = async () => {
     try {
       const response = await userService.updateProfile(editData, user.token);
+      if (!isValidName(editData.name)) {
+        window.alert('Name should be at least 2 characters.');
+        return;
+      }
+      if (!isValidEmail(editData.email)) {
+        window.alert('Please enter a valid email address.');
+        return;
+      }
+      if (editData.newPassword || editData.confirmPassword) {
+        if (!isValidPassword(editData.newPassword)) {
+          window.alert('Password should be at least 6 characters long.');
+          return;
+        }
+        if (editData.newPassword !== editData.confirmPassword) {
+          window.alert('Passwords do not match.');
+          return;
+        }
+      }
       if (response.data.status === 'ok') {
         setProfileData(response.data.user);
         setUser({ ...user, ...response.data.user });
@@ -98,6 +117,24 @@ const Profile = () => {
           value={editData.email}
           onChange={handleInputChange}
         />
+        <label htmlFor="newPassword">New Password</label>
+        <input
+          id="newPassword"
+          type="password"
+          name="newPassword"
+          value={editData.newPassword}
+          onChange={handleInputChange}
+        />
+
+        <label htmlFor="confirmPassword">Confirm New Password</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          name="confirmPassword"
+          value={editData.confirmPassword}
+          onChange={handleInputChange}
+        />
+
 <button onClick={handleUpdate} className="save-changes">Save Changes</button>
         <button onClick={handleEdit} className="cancel">Cancel</button>
       </div>

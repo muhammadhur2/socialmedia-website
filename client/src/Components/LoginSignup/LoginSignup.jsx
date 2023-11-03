@@ -54,34 +54,39 @@ const LoginSignup = () => {
   
   const handleSignup = async () => {
     if(action == "Login"){
-    setAction("Sign Up");
-    return;
+      setAction("Sign Up");
+      return;
     }
+    
+    // Validate the fields before sending the signup request
+    if (!isValidName(name)) {
+      window.alert('Name should be at least 2 characters.');
+      return;
+    }
+    if (!isValidEmail(email)) {
+      window.alert('Please enter a valid email address.');
+      return;
+    }
+    if (!isValidPassword(password)) {
+      window.alert('Password should be at least 6 characters long.');
+      return;
+    }
+    
     try {
       const response = await userService.register({ name, email, password });
       console.log(response);
       const responseData = response.data;
-      if (!isValidName(name)) {
-        window.alert('Name should be at least 2 characters.');
-        return;
-    }
-    if (!isValidEmail(email)) {
-        window.alert('Please enter a valid email address.');
-        return;
-    }
-    if (!isValidPassword(password)) {
-        window.alert('Password should be at least 6 characters long.');
-        return;
-    }
+  
       if (responseData.status === 'ok') {
         window.alert('Signup Successful');
       } else {
         window.alert('Signup Failed');
       }
     } catch (error) {
-      window.alert('An error occurred during signup',error);
+      window.alert('An error occurred during signup', error);
     }
   };
+  
   
   return (
     <div className='container'>
