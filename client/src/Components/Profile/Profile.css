@@ -116,6 +116,8 @@ button.cancel:hover {
 
 /* Delete Account Button */
 button.danger {
+  width: 220px;
+  height: 59px;
   background: #f44336; /* Red color for danger */
   color: white;
   border-radius: 30px;
@@ -124,7 +126,7 @@ button.danger {
   font-weight: 500;
   border: none;
   cursor: pointer;
-  margin-left: 10px; /* Spacing between buttons */
+   /* Spacing between buttons */
   transition: background-color 0.3s ease;
 }
 
