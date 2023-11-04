@@ -6,6 +6,7 @@ const mongoose = require('./config/mongoose');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
 const challengeRoutes = require('./routes/challengeRoutes')
+const skillBadgeRoutes = require('./routes/skillbadgeRoutes')
 // const { updateProfile, getProfile } = require('./controllers/userController');
 // const { verifyToken } = require('./utils/jwtHelper');
 
@@ -21,6 +22,7 @@ mongoose.connect();
 app.use('/users', userRoutes);
 app.use('/posts', postRoutes);
 app.use('/challenges', challengeRoutes);
+app.use('/skillbadges', skillBadgeRoutes);
 
 app.get('/hello', (req, res) => {
     res.send('Hello World');

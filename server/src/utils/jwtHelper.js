@@ -15,6 +15,7 @@ exports.generateToken = (user) => {
 
 exports.verifyToken = (req, res, next) => {
     const bearerHeader = req.header('Authorization');
+    console.log(bearerHeader)
     if (!bearerHeader) {
     return res.status(401).json({ status: 'error', error: 'Token missing' });
     }
