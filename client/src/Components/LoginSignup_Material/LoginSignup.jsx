@@ -43,21 +43,33 @@ export default function LoginSignup() {
   };
 
   const handleSignup = async (name, email, password) => {
-    if (!isValidName(name) || !isValidEmail(email) || !isValidPassword(password)) {
-      window.alert('Invalid input');
+    if (!isValidName(name)) {
+      window.alert('Name should be at least 2 characters.');
+      return;
+    }
+    if (!isValidEmail(email)) {
+      window.alert('Please enter a valid email address.');
+      return;
+    }
+    if (!isValidPassword(password)) {
+      window.alert('Password should be at least 6 characters long.');
       return;
     }
     try {
-      const responseData = await userService.register({ name, email, password });
+      const response = await userService.register({ name, email, password });
+      console.log(response);
+      const responseData = response.data;
+  
       if (responseData.status === 'ok') {
         window.alert('Signup Successful');
       } else {
         window.alert('Signup Failed');
       }
     } catch (error) {
-      window.alert('An error occurred during signup: ' + error.message);
+      window.alert('An error occurred during signup', error);
     }
   };
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
