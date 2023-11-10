@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "http://localhost:3001/posts";  // Replace with your API URL
+const API_URL = "https://socialmedia-website-three.vercel.app/posts";  // Replace with your API URL
 
 class PostService {
   async createPost(postData, token) {
