@@ -28,8 +28,14 @@ app.get('/hello', (req, res) => {
     res.send('Hello World');
   });
 
-app.listen(3001, () => {
-    console.log('Server running on http://localhost:3001');
+// app.listen(3001, () => {
+//     console.log('Server running on http://localhost:3001');
+// });
+
+// for versel
+const port = process.env.PORT || 3001;
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
 });
 
 
