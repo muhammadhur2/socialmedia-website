@@ -2,11 +2,11 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('./config/mongoose');
-const userRoutes = require('./routes/userRoutes');
-const postRoutes = require('./routes/postRoutes');
-const challengeRoutes = require('./routes/challengeRoutes')
-const skillBadgeRoutes = require('./routes/skillbadgeRoutes')
+const mongoose = require('./api/config/mongoose');
+const userRoutes = require('./api/routes/userRoutes');
+const postRoutes = require('./api/routes/postRoutes');
+const challengeRoutes = require('./api/routes/challengeRoutes')
+const skillBadgeRoutes = require('./api/routes/skillbadgeRoutes')
 // const { updateProfile, getProfile } = require('./controllers/userController');
 // const { verifyToken } = require('./utils/jwtHelper');
 
