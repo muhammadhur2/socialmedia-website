@@ -1,0 +1,62 @@
+pipeline {
+    agent any 
+    environment {
+        GIT_PREVIOUS_SUCCESSFUL_COMMIT = ''
+        GIT_CURRENT_COMMIT = ''
+    }
+    stages {
+        stage('Check Node.js version') {
+            steps {
+                sh 'node --version'
+            }
+        }
+        stage('Checkout SCM') {
+           steps {  
+               script {
+                   GIT_PREVIOUS_SUCCESSFUL_COMMIT = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
+               }
+               git branch: 'main', credentialsId: 'github', url: 'https://github.com/muhammadhur2/socialmedia-website.git'
+               script {
+                   GIT_CURRENT_COMMIT = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
+               }
+           }
+        }
+        stage('Build and Install') {
+            when {
+                expression {
+                    return changesInClientFolder(GIT_PREVIOUS_SUCCESSFUL_COMMIT, GIT_CURRENT_COMMIT)
+                }
+            }
+            steps {
+                sh '''
+                   echo Build started on `date`
+                   cd client
+                   npm install
+                   npm run build
+                   ls
+                 '''
+            }   
+        }
+        stage('Update to S3 and Cloudfront Invalidation') {
+            when {
+                expression {
+                    return changesInClientFolder(GIT_PREVIOUS_SUCCESSFUL_COMMIT, GIT_CURRENT_COMMIT)
+                }
+            }
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'YOUR_AWS_CREDENTIALS_ID']]) {
+                    sh '''#!/bin/bash
+                        cd client
+                        aws s3 sync ./build/ s3://skillsphere-frontend/
+                        aws cloudfront create-invalidation --distribution-id "E2VMFQV49YRWAU" --paths "/*"
+                    '''
+                }
+            }
+        }
+    }
+}
+
+def changesInClientFolder(previousCommit, currentCommit) {
+    def diffOutput = sh(script: "git diff --name-only $previousCommit $currentCommit", returnStdout: true).trim()
+    return diffOutput.contains("client/")
+}
