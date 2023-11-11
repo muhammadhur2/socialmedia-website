@@ -1,9 +1,5 @@
 pipeline {
     agent any 
-    environment {
-        GIT_PREVIOUS_SUCCESSFUL_COMMIT = ''
-        GIT_CURRENT_COMMIT = ''
-    }
     stages {
         stage('Check Node.js version') {
             steps {
@@ -11,20 +7,22 @@ pipeline {
             }
         }
         stage('Checkout SCM') {
-           steps {  
-               script {
-                   GIT_PREVIOUS_SUCCESSFUL_COMMIT = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
-               }
-               git branch: 'main', credentialsId: 'github', url: 'https://github.com/muhammadhur2/socialmedia-website.git'
-               script {
-                   GIT_CURRENT_COMMIT = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
-               }
-           }
+            steps {  
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/muhammadhur2/socialmedia-website.git'
+            }
+        }
+        stage('Determine Changes') {
+            steps {
+                script {
+                    def changedFiles = sh(script: "git diff --name-only HEAD HEAD~1", returnStdout: true).trim().split("\n")
+                    env.IS_CLIENT_CHANGED = changedFiles.any { it.startsWith('client') }.toString()
+                }
+            }
         }
         stage('Build and Install') {
             when {
                 expression {
-                    return changesInClientFolder(GIT_PREVIOUS_SUCCESSFUL_COMMIT, GIT_CURRENT_COMMIT)
+                    return env.IS_CLIENT_CHANGED == 'true'
                 }
             }
             steps {
@@ -40,7 +38,7 @@ pipeline {
         stage('Update to S3 and Cloudfront Invalidation') {
             when {
                 expression {
-                    return changesInClientFolder(GIT_PREVIOUS_SUCCESSFUL_COMMIT, GIT_CURRENT_COMMIT)
+                    return env.IS_CLIENT_CHANGED == 'true'
                 }
             }
             steps {
@@ -54,9 +52,4 @@ pipeline {
             }
         }
     }
-}
-
-def changesInClientFolder(previousCommit, currentCommit) {
-    def diffOutput = sh(script: "git diff --name-only $previousCommit $currentCommit", returnStdout: true).trim()
-    return diffOutput.contains("client/")
 }
