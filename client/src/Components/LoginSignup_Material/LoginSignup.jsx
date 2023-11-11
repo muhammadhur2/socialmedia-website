@@ -34,7 +34,7 @@ export default function LoginSignup() {
         setUser({
           token: responseData.token
         });
-        window.alert('Login Successful');
+       
         navigate('/profile');
       } else {
         window.alert('Login Failed');
@@ -63,7 +63,8 @@ export default function LoginSignup() {
       const responseData = response.data;
   
       if (responseData.status === 'ok') {
-        window.alert('Signup Successful');
+        
+        handleLogin(email,password);
       } else {
         window.alert('Signup Failed');
       }
