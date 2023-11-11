@@ -12,7 +12,7 @@ function App() {
   const token = localStorage.getItem('token');
   const [user, setUser] = useState(token ? { token } : null);
   console.log("User state in App:", user);
-
+// dummy change
   return (
     <UserContext.Provider value={{ user, setUser }}>  {/* Provide the context */}
       <Router>
