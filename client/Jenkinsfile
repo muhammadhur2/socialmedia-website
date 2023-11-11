@@ -42,7 +42,7 @@ pipeline {
                 }
             }
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'YOUR_AWS_CREDENTIALS_ID']]) {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws']]) {
                     sh '''#!/bin/bash
                         cd client
                         aws s3 sync ./build/ s3://skillsphere-frontend/
