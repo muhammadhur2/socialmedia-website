@@ -16,7 +16,8 @@ import userService from '../../Services/UserService';
 import { isValidEmail, isValidPassword, isValidName } from '../../utils/Validation';
 import UserContext from '../../UserContext';
 import { useNavigate } from 'react-router-dom';
-import myLocalImage from '../LoginSignup_Material/picture_gpt.png';
+//import myLocalImage from '../LoginSignup_Material/picture_gpt.png';
+import myLocalImage from '../Assets/skill-sphere.png'
 //check
 const defaultTheme = createTheme();
 
@@ -100,7 +101,7 @@ export default function LoginSignup() {
       backgroundRepeat: 'no-repeat',
       backgroundColor: (t) =>
         t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-      backgroundSize: 'cover',
+      backgroundSize: 'contain',
       backgroundPosition: 'center',
     }}
   />
