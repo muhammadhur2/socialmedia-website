@@ -207,3 +207,21 @@ exports.sendFriendRequest = async (req, res) => {
   
     res.json({ status: 'ok', incomingRequests: user.incomingRequests });
   };
+
+  exports.searchFriends = async (req, res) => {
+    try {
+        const searchQuery = req.query.q;
+        const users = await User.find({
+            $or: [
+                { name: { $regex: searchQuery, $options: 'i' } },
+                { email: { $regex: searchQuery, $options: 'i' } }
+            ]
+        }, '-password');  // Exclude password field
+
+        console.log(users)
+        res.json({ status: 'ok', users });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ status: 'error', error: 'Error searching for friends' });
+    }
+};

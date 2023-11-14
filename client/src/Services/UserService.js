@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_URL = "https://socialmedia-website-three.vercel.app/users";  // Replace with your API URL
+// const API_URL = "http://localhost:3001/users";  // Replace with your API URL
 
 class UserService {
   async register(userData) {
@@ -65,6 +66,17 @@ class UserService {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     return axios.get(`${API_URL}/listfriendrequests`, config);
   }
+
+
+  async searchFriends(token, searchTerm) {
+    const config = { 
+      headers: { Authorization: `Bearer ${token}` },
+      params: { q: searchTerm }
+    };
+    return axios.get(`${API_URL}/searchFriends`, config);
+  }
 }
+
+
 
 export default new UserService();
