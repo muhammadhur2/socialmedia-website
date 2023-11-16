@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate  } from 'react-router-
 
 import LoginPage from './Pages/LoginPage';  // Adjust the path if needed
 import ProfilePage from './Pages/ProfilePage';  // Adjust the path if needed
+import FriendsPage from './Pages/FriendsPage';  // Adjust the path if needed
 import UserContext from './UserContext';  // import UserContext
 
 import PrivateRoute from './Routes/PrivateRoute'; // Adjust the path if needed
@@ -26,6 +27,14 @@ function App() {
     } 
   />
   <Route 
+    path="/friends" 
+    element={
+      <PrivateRoute>
+        <FriendsPage />
+      </PrivateRoute>
+    } 
+  />
+  <Route 
     path="/login" 
     element={
       <PublicRoute redirectTo="/profile">
@@ -33,6 +42,7 @@ function App() {
       </PublicRoute>
     } 
   />
+  
   <Route path="*" element={<Navigate to="/login" />} />
 </Routes>
       </Router>
