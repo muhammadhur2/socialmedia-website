@@ -45,15 +45,10 @@ pipeline {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws']]) {
                     sh '''#!/bin/bash
                         cd client
-                        aws s3 sync ./build/ s3://skillsphere-frontend/
+                        aws s3 sync ./build/ s3://hur-web-dev-s3bucket/
                         aws cloudfront create-invalidation --distribution-id "E2VMFQV49YRWAU" --paths "/*"
                     '''
                 }
-            }
-        }
-        stage('Discord Notification') {
-            steps {
-                discordSend description: "Jenkins Pipeline Build", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "https://discord.com/api/webhooks/1176059009317490789/CkvWvwFP6iNs2oibVE-rno9Hj9mOYVCxfjsCShXfiqpBiuPskCPIkwg1n3oFvsxb70uU"
             }
         }
     }
