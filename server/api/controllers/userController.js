@@ -199,7 +199,7 @@ exports.sendFriendRequest = async (req, res) => {
     const userId = req.user.id;
   
     const user = await User.findById(userId)
-                             .populate('incomingRequests', 'name email -_id');  // Only get name and email of the friends
+                             .populate('incomingRequests', 'name email _id');  // Only get name and email of the friends
     
     if (!user) {
       return res.json({ status: 'error', error: 'User not found' });
