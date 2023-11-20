@@ -57,6 +57,7 @@ const FriendsPage = () => {
 
   const handleAcceptRequest = async (friendId) => {
     try {
+      console.log(friendId)
       const response = await userService.acceptFriendRequest({ friendId }, user.token);
       if (response.data.status === 'ok') {
         fetchIncomingRequests(); // Re-fetch to update the list
