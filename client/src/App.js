@@ -5,6 +5,7 @@ import LoginPage from './Pages/LoginPage';  // Adjust the path if needed
 import ProfilePage from './Pages/ProfilePage';  // Adjust the path if needed
 import FriendsPage from './Pages/FriendsPage';
 import ChallengePage from './Pages/ChallengePage';  // Adjust the path if needed
+import CreateChallengePage from './Pages/CreateChallengePage';
 import UserContext from './UserContext';  // import UserContext
 
 
@@ -33,6 +34,14 @@ function App() {
     element={
       <PrivateRoute>
         <FriendsPage />
+      </PrivateRoute>
+    } 
+  />
+  <Route 
+    path="/createchallenge" 
+    element={
+      <PrivateRoute>
+        <CreateChallengePage />
       </PrivateRoute>
     } 
   />
