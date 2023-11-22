@@ -3,13 +3,21 @@ const Challenge = require('../models/challenge.model');
 // Create a new Challenge
 exports.createChallenge = async (req, res) => {
   try {
-    const challenge = new Challenge(req.body);
+    const userId = req.user.id; // Get the user ID from the request
+
+    // Create a new challenge with the request body and set the author field
+    const challenge = new Challenge({
+      ...req.body,
+      author: userId // Set the author to the logged-in user's ID
+    });
+
     await challenge.save();
     res.status(201).json({ message: "Challenge created", challenge });
   } catch (error) {
     res.status(400).json({ message: "Error creating challenge", error });
   }
 };
+
 
 // List all Challenges with Filters
 exports.listChallenges = async (req, res) => {
