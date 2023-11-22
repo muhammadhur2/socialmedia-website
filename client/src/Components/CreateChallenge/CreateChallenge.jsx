@@ -28,11 +28,10 @@ const CreateChallengePage = () => {
       console.log(title);
       console.log(complexity);
       console.log(tags);
-      console.log(user._id);
+      // console.log(user._id);
       const response = await ChallengeService.createChallenge(challengeData, user.token);
       
       if (response && response.data) {
-        console.log(user.id);
         setSuccess('Challenge created successfully!');
         // Reset form fields
         setTitle('');
