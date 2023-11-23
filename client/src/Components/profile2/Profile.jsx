@@ -1,62 +1,69 @@
+// PersonalProfile.js
+
 import React from 'react';
-import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography, MDBIcon } from 'mdb-react-ui-kit';
-import './Profile.css'; 
+import { Container, Grid, Card, CardContent, CardMedia, Typography, Box, IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import styles from './Profile.module.css'; // Make sure this path is correct
+
 export default function PersonalProfile() {
   return (
-    <section className="vh-100" style={{ backgroundColor: '#f4f5f7' }}>
-      <MDBContainer className="py-5 h-100">
-        <MDBRow className="justify-content-center align-items-center h-100">
-          <MDBCol lg="6" className="mb-4 mb-lg-0">
-            <MDBCard className="mb-3" style={{ borderRadius: '.5rem' }}>
-              <MDBRow className="g-0">
-                <MDBCol md="4" className="gradient-custom text-center text-white"
-                  style={{ borderTopLeftRadius: '.5rem', borderBottomLeftRadius: '.5rem' }}>
-                  <MDBCardImage src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                    alt="Avatar" className="my-5" style={{ width: '80px' }} fluid />
-                  <MDBTypography tag="h5">Marie Horwitz</MDBTypography>
-                  <MDBCardText>Web Designer</MDBCardText>
-                  <MDBIcon far icon="edit mb-5" />
-                </MDBCol>
-                <MDBCol md="8">
-                  <MDBCardBody className="p-4">
-                    <MDBTypography tag="h6">Information</MDBTypography>
+    <section className={styles.vh100} style={{ backgroundColor: '#f4f5f7' }}>
+      <Container className={`${styles.py5} ${styles.h100}`}>
+        <Grid container justifyContent="center" alignItems="center" className={styles.h100}>
+          <Grid item lg={6} className={styles.mb4}>
+            <Card className={styles.mb3} sx={{ borderRadius: '10px' }}>
+              <Grid container>
+                <Grid item md={4} className={`${styles.textCenter} ${styles.textWhite} ${styles.gradientcustom}`}
+                      sx={{ borderTopLeftRadius: '10px', borderBottomLeftRadius: '10px' }}>
+                  <CardMedia
+                    component="img"
+                    image="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                    alt="Avatar"
+                    className={styles.my5}
+                    sx={{ width: '80px' }}
+                  />
+                  <Typography variant="h5">Marie Horwitz</Typography>
+                  <Typography>Web Designer</Typography>
+                  <IconButton color="default" aria-label="edit">
+                    <EditIcon />
+                  </IconButton>
+                </Grid>
+                <Grid item md={8}>
+                  <CardContent>
+                    <Typography variant="h6">Information</Typography>
                     <hr className="mt-0 mb-4" />
-                    <MDBRow className="pt-1">
-                      <MDBCol size="6" className="mb-3">
-                        <MDBTypography tag="h6">Email</MDBTypography>
-                        <MDBCardText className="text-muted">info@example.com</MDBCardText>
-                      </MDBCol>
-                      <MDBCol size="6" className="mb-3">
-                        <MDBTypography tag="h6">Phone</MDBTypography>
-                        <MDBCardText className="text-muted">123 456 789</MDBCardText>
-                      </MDBCol>
-                    </MDBRow>
+                    <Grid container pt={1}>
+                      <Grid item xs={6} className={styles.mb3}>
+                        <Typography variant="h6">Email</Typography>
+                        <Typography className={styles.textMuted}>info@example.com</Typography>
+                      </Grid>
+                      <Grid item xs={6} className={styles.mb3}>
+                        <Typography variant="h6">Phone</Typography>
+                        <Typography className={styles.textMuted}>123 456 789</Typography>
+                      </Grid>
+                    </Grid>
 
-                    <MDBTypography tag="h6">Information</MDBTypography>
-                    <hr className="mt-0 mb-4" />
-                    <MDBRow className="pt-1">
-                      <MDBCol size="6" className="mb-3">
-                        <MDBTypography tag="h6">Email</MDBTypography>
-                        <MDBCardText className="text-muted">info@example.com</MDBCardText>
-                      </MDBCol>
-                      <MDBCol size="6" className="mb-3">
-                        <MDBTypography tag="h6">Phone</MDBTypography>
-                        <MDBCardText className="text-muted">123 456 789</MDBCardText>
-                      </MDBCol>
-                    </MDBRow>
-
-                    <div className="d-flex justify-content-start">
-                      <a href="#!"><MDBIcon fab icon="facebook me-3" size="lg" /></a>
-                      <a href="#!"><MDBIcon fab icon="twitter me-3" size="lg" /></a>
-                      <a href="#!"><MDBIcon fab icon="instagram me-3" size="lg" /></a>
-                    </div>
-                  </MDBCardBody>
-                </MDBCol>
-              </MDBRow>
-            </MDBCard>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
+                    <Box className="d-flex justify-content-start">
+                      <IconButton aria-label="facebook" color="primary">
+                        <FacebookIcon fontSize="large" />
+                      </IconButton>
+                      <IconButton aria-label="twitter" color="primary">
+                        <TwitterIcon fontSize="large" />
+                      </IconButton>
+                      <IconButton aria-label="instagram" color="primary">
+                        <InstagramIcon fontSize="large" />
+                      </IconButton>
+                    </Box>
+                  </CardContent>
+                </Grid>
+              </Grid>
+            </Card>
+          </Grid>
+        </Grid>
+      </Container>
     </section>
   );
 }

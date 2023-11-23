@@ -1,0 +1,78 @@
+/* EditButton.module.css */
+.gradientCustom {
+  background-color: #9de2ff;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  background-color: #000;
+  height: 200px;
+}
+
+.profilePictureBox {
+  margin: 4rem 1rem 2rem 4rem;
+  display: 'flex';
+  flexDirection: 'column';
+  alignItems: 'center';
+}
+
+.profilePicture {
+  max-width: 100%; /* adjust as needed */
+  max-height: 150px; /* adjust as needed */
+  object-fit: contain; /* or cover, depending on the desired effect */
+}
+
+
+.editInputName,
+.editInputEmail {
+  /* You might want to add a max-width based on the parent's width */
+  max-width: calc(100% - 2rem); /* This accounts for padding */
+  margin: 0; /* Remove default margins if necessary */
+}
+.userNameBox {
+  margin-left: 3rem;
+  margin-top: 130px;
+}
+.statsBox {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  align-items: center;
+}
+
+.editButton {
+  height: 36px;
+  /* Aligning the button text vertically */
+  display: flex;
+  align-items: center;
+}
+.deleteButton {
+  background-color: red;
+  color: white;
+  /* Add any other styling you need, like hover states */
+  &:hover {
+    background-color: darkred;
+  }
+}
+.statItem {
+  text-align: center;
+  margin-right: 2rem; /* Adjust the right margin as needed */
+  /* Removed justify-content as it's not necessary for individual items */
+}
+
+.aboutSection {
+  background-color: #f8f9fa;
+}
+
+.recentPhotosHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.imageItem {
+  width: 100%;
+  border-radius: 8px;
+}

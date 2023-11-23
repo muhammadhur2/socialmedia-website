@@ -17,7 +17,7 @@ import { isValidEmail, isValidPassword, isValidName } from '../../utils/Validati
 import UserContext from '../../UserContext';
 import { useNavigate } from 'react-router-dom';
 //import myLocalImage from '../LoginSignup_Material/picture_gpt.png';
-import myLocalImage from '../Assets/skill-sphere.png'
+import myLocalImage from '../Assets/picture_gpt.png'
 //check
 const defaultTheme = createTheme();
 
@@ -102,7 +102,7 @@ export default function LoginSignup() {
       backgroundRepeat: 'no-repeat',
       backgroundColor: (t) =>
         t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-      backgroundSize: 'contain',
+      backgroundSize: 'cover',
       backgroundPosition: 'center',
     }}
   />
