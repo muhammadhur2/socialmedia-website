@@ -234,7 +234,6 @@ exports.sendFriendRequest = async (req, res) => {
             ]
         }, '-password');  // Exclude password field
 
-        console.log(users)
         res.json({ status: 'ok', users });
     } catch (err) {
         console.log(err);
