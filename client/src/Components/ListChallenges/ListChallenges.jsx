@@ -45,7 +45,7 @@ const ChallengeListPage = () => {
           >
             <h2>{challenge.title}</h2>
             {/* Assuming the author's name or relevant information is available */}
-            <p>Author: {challenge.author}</p>
+            <p>Author: {challenge.author ? challenge.author.name : 'Unknown'}</p>
           </div>
         ))}
       </div>

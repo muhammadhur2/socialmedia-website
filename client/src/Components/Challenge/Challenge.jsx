@@ -57,7 +57,7 @@ const ChallengeDetailPage = () => {
     <div>
       <h1>{challenge.title}</h1>
       <p>Complexity: {challenge.complexity}</p>
-      <p>Author ID: {challenge.author}</p>
+      <p>Author: {challenge.author.name}</p> {/* Updated to display author's name */}
       <p>Created At: {new Date(challenge.createdAt).toLocaleString()}</p>
       <p>Updated At: {new Date(challenge.updatedAt).toLocaleString()}</p>
       {/* Render other challenge details as needed */}
