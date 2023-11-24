@@ -6,6 +6,7 @@ const { updateProfile, getProfile, deleteAccount } = require('../controllers/use
 
 router.post('/register', userController.register);
 router.post('/login', userController.login);
+router.get('/profile/:userId', getProfile);
 router.get('/profile', verifyToken, getProfile);
 router.put('/updateProfile', verifyToken, updateProfile);
 router.delete('/deleteAccount', verifyToken, deleteAccount);

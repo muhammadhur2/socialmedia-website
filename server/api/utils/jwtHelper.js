@@ -15,7 +15,7 @@ exports.generateToken = (user) => {
 
 exports.verifyToken = (req, res, next) => {
     const bearerHeader = req.header('Authorization');
-    console.log(bearerHeader)
+    // console.log(bearerHeader)
     if (!bearerHeader) {
     return res.status(401).json({ status: 'error', error: 'Token missing' });
     }
@@ -28,7 +28,7 @@ exports.verifyToken = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.SECRET);
-        console.log("Decoded Token:", decoded); // Debugging line
+        // console.log("Decoded Token:", decoded); // Debugging line
         req.user = decoded;
         next();
     } catch (err) { // Using (err) instead of (e)

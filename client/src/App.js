@@ -22,14 +22,22 @@ function App() {
     <UserContext.Provider value={{ user, setUser }}>  {/* Provide the context */}
       <Router>
       <Routes>
-  <Route 
-    path="/profile" 
-    element={
-      <PrivateRoute>
-        <ProfilePage />
-      </PrivateRoute>
-    } 
-  />
+      <Route 
+            path="/profile/:userId" 
+            element={
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/profile" 
+            element={
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            } 
+          />
   <Route 
     path="/friends" 
     element={
