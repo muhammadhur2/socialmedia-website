@@ -5,6 +5,7 @@ import UserContext from '../../UserContext';
 import './Friends.css';
 
 const FriendsPage = () => {
+  const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [friends, setFriends] = useState([]);
   const [incomingRequests, setIncomingRequests] = useState([]);
@@ -27,6 +28,11 @@ const FriendsPage = () => {
     } catch (error) {
       console.error("Error fetching friends", error);
     }
+  };
+
+  const navigateToProfile = (friendId) => {
+    // Navigate to friend's profile page
+    navigate(`/profile/${friendId}`);
   };
 
   const fetchIncomingRequests = async () => {
@@ -109,32 +115,50 @@ const FriendsPage = () => {
       <div className="friends-list">
         <h2>My Friends</h2>
         {friends.map(friend => (
-          <div key={friend._id}>
-            {friend.name} {/* Displaying the friend's name */}
+          <div key={friend._id} className="friend-item">
+            <span 
+              className="friend-name" 
+              onClick={() => navigateToProfile(friend._id)}
+              style={{ cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              {friend.name}
+            </span>
           </div>
         ))}
       </div>
 
       <div className="incoming-requests">
-        <h2>Incoming Requests</h2>
-        {incomingRequests.map(request => (
-          <div key={request._id}>
-            {request.name}
-            <button onClick={() => handleAcceptRequest(request._id)}>Accept</button>
-            <button onClick={() => handleRejectRequest(request._id)}>Reject</button>
-          </div>
-        ))}
-      </div>
+  <h2>Incoming Requests</h2>
+  {incomingRequests.map(request => (
+    <div key={request._id}>
+      <span 
+        className="request-name" 
+        onClick={() => navigateToProfile(request._id)}
+        style={{ cursor: 'pointer', textDecoration: 'underline' }}
+      >
+        {request.name}
+      </span>
+      <button onClick={() => handleAcceptRequest(request._id)}>Accept</button>
+      <button onClick={() => handleRejectRequest(request._id)}>Reject</button>
+    </div>
+  ))}
+</div>
 
-      <div className="search-results">
-        <h2>Search Results</h2>
-        {searchResults.map(result => (
-          <div key={result._id}>
-            {result.name}
-            <button onClick={() => handleSendRequest(result._id)}>Send Request</button>
-          </div>
-        ))}
-      </div>
+<div className="search-results">
+  <h2>Search Results</h2>
+  {searchResults.map(result => (
+    <div key={result._id}>
+      <span 
+        className="search-result-name" 
+        onClick={() => navigateToProfile(result._id)}
+        style={{ cursor: 'pointer', textDecoration: 'underline' }}
+      >
+        {result.name}
+      </span>
+      <button onClick={() => handleSendRequest(result._id)}>Send Request</button>
+    </div>
+  ))}
+</div>
     </div>
   );
 };

@@ -62,7 +62,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 // AppBar component
-const AppBar = () => {
+const AppBar = ( {toggleDrawer} ) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const navigate = useNavigate();
@@ -94,6 +94,10 @@ const AppBar = () => {
     navigate('/login');
   };
 
+  const profileredirect = () => {
+    navigate('/profile');
+  };
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -111,7 +115,7 @@ const AppBar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={profileredirect}>Profile</MenuItem>
       <MenuItem onClick={handleSignOut}>Signout</MenuItem>
     </Menu>
   );
@@ -204,6 +208,7 @@ const AppBar = () => {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 2 }}
+            onClick={() => toggleDrawer(true)}
           >
             <MenuIcon />
           </IconButton>
