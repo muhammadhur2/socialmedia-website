@@ -46,7 +46,7 @@ pipeline {
                     sh '''#!/bin/bash
                         cd client
                         aws s3 sync ./build/ s3://hur-web-dev-s3bucket/
-                        aws cloudfront create-invalidation --distribution-id "E2VMFQV49YRWAU" --paths "/*"
+                        aws cloudfront create-invalidation --distribution-id "E1LE2G3S5VD4MO" --paths "/*"
                     '''
                 }
             }
