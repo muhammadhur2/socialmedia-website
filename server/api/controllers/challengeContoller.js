@@ -8,7 +8,8 @@ exports.createChallenge = async (req, res) => {
     // Create a new challenge with the request body and set the author field
     const challenge = new Challenge({
       ...req.body,
-      author: userId // Set the author to the logged-in user's ID
+      author: userId, // Set the author to the logged-in user's ID
+      comments: req.body.comments ? req.body.comments : [] // Handle comments
     });
 
     await challenge.save();
@@ -17,8 +18,6 @@ exports.createChallenge = async (req, res) => {
     res.status(400).json({ message: "Error creating challenge", error });
   }
 };
-
-
 // List all Challenges with Filters
 exports.listChallenges = async (req, res) => {
     try {
@@ -125,3 +124,23 @@ exports.getChallengesByTag = async (req, res) => {
       res.status(400).json({ message: "Error fetching challenges by complexity", error });
     }
   };
+
+  // Add a comment to a Challenge
+exports.addCommentToChallenge = async (req, res) => {
+  try {
+    const challengeId = req.params.challengeId;
+    const comment = { ...req.body, author: req.user.id }; // Create comment object
+
+    const challenge = await Challenge.findById(challengeId);
+    if (!challenge) {
+      return res.status(404).json({ message: "Challenge not found" });
+    }
+
+    challenge.comments.push(comment); // Add comment to the challenge
+    await challenge.save();
+
+    res.status(200).json({ message: "Comment added", challenge });
+  } catch (error) {
+    res.status(400).json({ message: "Error adding comment", error });
+  }
+};
