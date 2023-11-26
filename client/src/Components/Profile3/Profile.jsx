@@ -3,9 +3,12 @@ import styles from './Profile.module.css';
 import { Box, Button, Card, CardContent, CardMedia, Container, Grid, Typography, TextField } from '@mui/material';
 import userService from '../../Services/UserService';
 import UserContext from '../../UserContext';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 export default function ProfilePage() {
+  const { userId } = useParams(); // Get the user identifier from URL
+  console.log(userId)
+
   const { user, setUser } = useContext(UserContext);
   const [profileData, setProfileData] = useState({ name: '', email: '' });
   const [isEditing, setIsEditing] = useState(false);
@@ -14,20 +17,20 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      if (user && user.token) {
-        try {
-          const response = await userService.getProfile(user.token);
-          if (response.data.status === 'ok') {
-            setProfileData(response.data.user);
-            setEditData({ name: response.data.user.name, email: response.data.user.email });
-          }
-        } catch (error) {
-          console.error("Error fetching profile", error);
+      try {
+        const profileUserId = userId || user.id; // Use URL userId or fallback to logged-in user's id
+        const response = await userService.getProfile(profileUserId, user.token);
+        if (response.data.status === 'ok') {
+          setProfileData(response.data.user);
         }
+      } catch (error) {
+        console.error("Error fetching profile", error);
       }
     };
-    fetchProfile();
-  }, [user]);
+    if (user && user.token) {
+      fetchProfile();
+    }
+  }, [userId, user]);
 
   const handleEditClick = () => {
     if (isEditing) {
@@ -81,6 +84,9 @@ export default function ProfilePage() {
       }
     }
   };
+
+  const isOwnProfile = user && user.id === userId;
+
   return (
     <Box className={styles.gradientCustom} sx={{ py: 5, height: '100vh' }}>
       <Container>
@@ -132,7 +138,9 @@ export default function ProfilePage() {
                 </Box>
               </Box>
               <Box className={styles.statsBox}>
+              
   <Grid container justifyContent="space-between" alignItems="center">
+  {isOwnProfile && (
     <Grid item>
       <Button onClick={handleEditClick} variant="outlined" color="inherit" className={styles.editButton}>
         {isEditing ? 'Save' : 'Edit Profile'}
@@ -150,6 +158,8 @@ export default function ProfilePage() {
 
       </Box>
     </Grid>
+    )}
+
     {/* ...other grid items... */}
     <Grid item>
   <Grid container justifyContent="flex-end" alignItems="center" textAlign="center" spacing={2}> {/* Adjust the spacing value as needed */}

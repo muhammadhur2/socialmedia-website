@@ -58,17 +58,33 @@ exports.login = [
 
 
 exports.getProfile = async (req, res) => {
-    try {
-        // Extract user info from req.user which was attached in verifyToken middleware
-        const user = await User.findOne({ email: req.user.email }, { password: 0 }); // Exclude password from query
-        if (user) {
-            return res.json({ status: 'ok', user });
-        } else {
-            return res.json({ status: 'error', error: 'User not found' });
-        }
-    } catch (err) {
-        return res.json({ status: 'error', error: 'Error' });
+  try {
+    const userId = req.params.userId || req.user?.id;
+    const user = await User.findById(userId, { password: 0 });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
+
+    const isOwnProfile = req.user && userId === req.user.id;
+    let profileData;
+    
+    if (isOwnProfile) {
+      profileData = user; // All user data for own profile
+    } else {
+      // Define the public data fields you want to expose
+      profileData = {
+        name: user.name,
+        email: user.email
+        // Add other fields that you want to be public
+      };
+    }
+
+    res.json({ status: 'ok', user: profileData });
+  } catch (err) {
+    console.error(`Error in getProfile: ${err.message}`);
+    res.status(500).json({ error: 'Error fetching profile' });
+  }
 };
 
 exports.updateProfile = [
@@ -218,7 +234,6 @@ exports.sendFriendRequest = async (req, res) => {
             ]
         }, '-password');  // Exclude password field
 
-        console.log(users)
         res.json({ status: 'ok', users });
     } catch (err) {
         console.log(err);

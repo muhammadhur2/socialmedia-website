@@ -42,7 +42,16 @@ exports.listChallenges = async (req, res) => {
   
       console.log("Final MongoDB query: ", query); 
       
-      const challenges = await Challenge.find(query);
+      let challenges = await Challenge.find(query)
+      .populate('author', 'name'); // Populate author field with name
+
+    // Handling cases where the author might have been deleted
+    challenges = challenges.map(challenge => {
+      if (!challenge.author) {
+        challenge = { ...challenge.toObject(), author: { name: "User Deleted" } };
+      }
+      return challenge;
+    });
       res.status(200).json({ challenges });
     } catch (error) {
       res.status(400).json({ message: "Error fetching challenges", error });
@@ -54,7 +63,11 @@ exports.listChallenges = async (req, res) => {
 // Get Challenge by ID
 exports.getChallengeById = async (req, res) => {
   try {
-    const challenge = await Challenge.findById(req.params.id);
+    const challenge = await Challenge.findById(req.params.id)
+      .populate('author', 'name');  // Populate the 'author' field with 'name' from 'UserData'
+
+      console.log(challenge);
+
     res.status(200).json({ challenge });
   } catch (error) {
     res.status(400).json({ message: "Challenge not found", error });
