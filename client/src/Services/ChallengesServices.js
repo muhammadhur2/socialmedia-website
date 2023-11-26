@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = "https://socialmedia-website-three.vercel.app/challenges";  // Replace with your API URL
-// const API_URL = "http://localhost:3001/challenges"
+// const API_URL = "https://socialmedia-website-three.vercel.app/challenges";  // Replace with your API URL
+const API_URL = "http://localhost:3001/challenges"
 
 class ChallengeService {
   
@@ -55,6 +55,9 @@ class ChallengeService {
 
   async createComment(challengeId, commentData, token) {
     const config = { headers: { Authorization: `Bearer ${token}` } };
+    console.log(API_URL);
+    console.log(challengeId);
+    console.log(commentData);
     return axios.post(`${API_URL}/${challengeId}/comments/create`, commentData, config);
   }
 

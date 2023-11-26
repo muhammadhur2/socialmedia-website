@@ -1,4 +1,5 @@
 const Challenge = require('../models/challenge.model'); 
+const CommentModel = require('../models/comment.model'); 
 
 // Create a new Challenge
 exports.createChallenge = async (req, res) => {
@@ -65,7 +66,6 @@ exports.getChallengeById = async (req, res) => {
     const challenge = await Challenge.findById(req.params.id)
       .populate('author', 'name');  // Populate the 'author' field with 'name' from 'UserData'
 
-      console.log(challenge);
 
     res.status(200).json({ challenge });
   } catch (error) {
@@ -126,21 +126,43 @@ exports.getChallengesByTag = async (req, res) => {
   };
 
   // Add a comment to a Challenge
-exports.addCommentToChallenge = async (req, res) => {
-  try {
-    const challengeId = req.params.challengeId;
-    const comment = { ...req.body, author: req.user.id }; // Create comment object
+  exports.addCommentToChallenge = async (req, res) => {
+    try {
+      const challengeId = req.params.challengeId;
+      const userId = req.user.id;
+  
 
-    const challenge = await Challenge.findById(challengeId);
-    if (!challenge) {
-      return res.status(404).json({ message: "Challenge not found" });
+      console.log("first here");
+      // Create a new Comment document
+      const newComment = new CommentModel({
+        text: req.body.text,
+        author: userId
+      });
+
+      console.log(newComment);
+  
+      // Save the comment
+      const savedComment = await newComment.save();
+
+      console.log("reached here");
+  
+      // Find the challenge and update its comments array
+      const challenge = await Challenge.findById(challengeId);
+      console.log(challenge);
+      console.log("also here");
+      if (!challenge) {
+        return res.status(404).json({ message: "Challenge not found" });
+      }
+      console.log("also also  here");
+      // Add the comment's ID to the challenge's comments array
+      challenge.comments.push(savedComment._id);
+  
+      // Save the updated challenge
+      await challenge.save();
+  
+      res.status(200).json({ message: "Comment added", challenge });
+    } catch (error) {
+      res.status(400).json({ message: "Error adding comment", error });
     }
-
-    challenge.comments.push(comment); // Add comment to the challenge
-    await challenge.save();
-
-    res.status(200).json({ message: "Comment added", challenge });
-  } catch (error) {
-    res.status(400).json({ message: "Error adding comment", error });
-  }
-};
+  };
+  

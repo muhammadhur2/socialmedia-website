@@ -6,10 +6,10 @@ import UserContext from '../../UserContext'; // import UserContext
 const ChallengeDetailPage = () => {
   const { challengeId } = useParams();
   const [challenge, setChallenge] = useState(null);
-  const [newComment, setNewComment] = useState(''); // State for new comment
+  const [newComment, setNewComment] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { user } = useContext(UserContext); // Use user context
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     const fetchChallengeDetail = async () => {
@@ -31,10 +31,9 @@ const ChallengeDetailPage = () => {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    if (!newComment.trim()) return; // Prevent empty comments
+    if (!newComment.trim()) return;
 
     try {
-      // Call the service to add a comment (Assuming it's available in ChallengeService)
       await ChallengeService.createComment(challengeId, { text: newComment }, user.token);
       setNewComment('');
       try {
@@ -78,7 +77,8 @@ const ChallengeDetailPage = () => {
       <h2>Comments</h2>
       {challenge.comments && challenge.comments.map((comment, index) => (
         <div key={index}>
-          <p>{comment.author.name}: {comment.text}</p>
+          {/* Check if comment.author exists before accessing its properties */}
+          <p>{comment.author ? comment.author.name : 'Unknown Author'}: {comment.text}</p>
         </div>
       ))}
       {/* Comment Form */}
