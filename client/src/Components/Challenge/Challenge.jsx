@@ -51,20 +51,20 @@ const ChallengeDetailPage = () => {
 
   const handleLike = async () => {
     try {
-      await ChallengeService.likeChallenge(challengeId, user.token);
-      try {
-        setIsLoading(true);
-        const response = await ChallengeService.getChallengeById(challengeId, user.token);
-        setChallenge(response.data.challenge);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
+      await ChallengeService.toggleLikeChallenge(challengeId, user.token);
+  
+      setIsLoading(true);
+      const response = await ChallengeService.getChallengeById(challengeId, user.token);
+      setChallenge(response.data.challenge);
+      setIsLoading(false);
+  
     } catch (err) {
       setError(err.message);
+      setIsLoading(false);
     }
   };
+  
+  
 
   if (!user || !user.token) {
     return <div>Please log in to view challenge details.</div>;

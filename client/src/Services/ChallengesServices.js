@@ -86,9 +86,16 @@ async likeChallenge(challengeId, token) {
 }
 
 // Remove a like from a challenge
+// Inside ChallengeService
+
 async unlikeChallenge(challengeId, token) {
   const config = { headers: { Authorization: `Bearer ${token}` } };
   return axios.post(`${API_URL}/${challengeId}/unlike`, {}, config);
+}
+
+async toggleLikeChallenge(challengeId, token) {
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  return axios.post(`${API_URL}/challenges/${challengeId}/toggleLike`, {}, config);
 }
 
   

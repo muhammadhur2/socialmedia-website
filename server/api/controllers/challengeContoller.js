@@ -204,19 +204,41 @@ exports.likeChallenge = async (req, res) => {
   }
 };
 
-// Remove a like from a challenge
+// In your challenge controller
 exports.unlikeChallenge = async (req, res) => {
+  const challengeId = req.params.id;
+  const userId = req.user.id; // Extract user ID from the token
+
+  await Challenge.findByIdAndUpdate(challengeId, {
+    $pull: { likes: userId }
+  });
+
+  res.status(200).json({ message: "Challenge unliked" });
+};
+
+// In your challenge controller
+exports.toggleLikeChallenge = async (req, res) => {
+  const challengeId = req.params.id;
+  const userId = req.user.id; // Extract user ID from the token
+
   try {
-    const challengeId = req.params.id;
-    const userId = req.user.id;
+    const challenge = await Challenge.findById(challengeId);
 
-    await Challenge.findByIdAndUpdate(challengeId, {
-      $pull: { likes: userId }
-    });
+    if (!challenge) {
+      return res.status(404).json({ message: "Challenge not found" });
+    }
 
-    res.status(200).json({ message: "Challenge unliked" });
+    const likeIndex = challenge.likes.indexOf(userId);
+    if (likeIndex > -1) {
+      challenge.likes.splice(likeIndex, 1); // User has liked, so unlike
+    } else {
+      challenge.likes.push(userId); // User hasn't liked, so like
+    }
+
+    await challenge.save();
+    res.status(200).json({ message: "Challenge like toggled" });
   } catch (error) {
-    res.status(400).json({ message: "Error unliking challenge", error });
+    res.status(400).json({ message: "Error toggling challenge like", error });
   }
 };
 
