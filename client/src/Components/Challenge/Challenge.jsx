@@ -77,6 +77,7 @@ const ChallengeDetailPage = () => {
       <h2>Comments</h2>
       {challenge.comments && challenge.comments.map((comment, index) => (
         <div key={index}>
+          {console.log(comment)}
           {/* Check if comment.author exists before accessing its properties */}
           <p>{comment.author ? comment.author.name : 'Unknown Author'}: {comment.text}</p>
         </div>

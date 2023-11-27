@@ -64,14 +64,27 @@ exports.listChallenges = async (req, res) => {
 exports.getChallengeById = async (req, res) => {
   try {
     const challenge = await Challenge.findById(req.params.id)
-      .populate('author', 'name');  // Populate the 'author' field with 'name' from 'UserData'
+      .populate('author', 'name') // Populate the challenge's author
+      .populate({
+        path: 'comments', // Populate the comments
+        model: 'Comment', // Ensure this is the correct model name for your comments
+        populate: {
+          path: 'author',
+          model: 'UserData', // Ensure this is the correct model name for your users
+          select: 'name' // Select only the name field of the author
+        }
+      });
 
+    if (!challenge) {
+      return res.status(404).json({ message: "Challenge not found" });
+    }
 
     res.status(200).json({ challenge });
   } catch (error) {
-    res.status(400).json({ message: "Challenge not found", error });
+    res.status(400).json({ message: "Error fetching challenge", error });
   }
 };
+
 
 // Update Challenge by ID
 exports.updateChallenge = async (req, res) => {
