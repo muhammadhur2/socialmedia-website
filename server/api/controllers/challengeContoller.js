@@ -121,14 +121,19 @@ exports.getChallengesByTag = async (req, res) => {
   // Get Challenges by Author
   exports.getChallengesByAuthor = async (req, res) => {
     try {
-      const authorId = new mongoose.Types.ObjectId(req.params.authorId);
-      const challenges = await Challenge.find({ author: authorId });
+      // Validate the authorId to make sure it's a valid ObjectId
+      const authorId = req.params.authorId;
+      if (!mongoose.Types.ObjectId.isValid(authorId)) {
+        return res.status(400).json({ message: "Invalid authorId" });
+      }
+  
+      // Use ChallengeModel to find the documents
+      const challenges = await ChallengeModel.find({ author: authorId });
       res.status(200).json({ challenges });
     } catch (error) {
-      res.status(400).json({ message: "Error fetching challenges by author", error });
+      res.status(500).json({ message: "Error fetching challenges by author", error });
     }
   };
-  
   // Get Challenges by Complexity
   exports.getChallengesByComplexity = async (req, res) => {
     try {
