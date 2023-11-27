@@ -12,6 +12,8 @@ router.post('/create', verifyToken, challengeController.createChallenge);
 // Route for adding a comment to a challenge
 router.post('/:challengeId/comments/create', verifyToken, challengeController.addCommentToChallenge);
 
+router.post('/:challengeId/like', verifyToken, challengeController.likeChallenge);
+
 // The rest of your routes...
 router.get('/list', verifyToken, challengeController.listChallenges);
 router.get('/:id', verifyToken, challengeController.getChallengeById);

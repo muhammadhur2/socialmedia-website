@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = "https://socialmedia-website-three.vercel.app/challenges";  // Replace with your API URL
-// const API_URL = "http://localhost:3001/challenges"
+// const API_URL = "https://socialmedia-website-three.vercel.app/challenges";  // Replace with your API URL
+const API_URL = "http://localhost:3001/challenges"
 
 class ChallengeService {
   

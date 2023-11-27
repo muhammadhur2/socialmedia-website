@@ -91,12 +91,12 @@ const ChallengeDetailPage = () => {
       <p>Updated At: {new Date(challenge.updatedAt).toLocaleString()}</p>
       
       <button onClick={handleLike}>Like</button>
-      <h3>Likes: {challenge.likes.length}</h3>
-      <ul>
-        {challenge.likes.map((like, index) => (
-          <li key={index}>{like.name}</li>
-        ))}
-      </ul>
+        <h3>Likes: {challenge.likes.length}</h3>
+        <ul>
+          {challenge.likes.map((like, index) => (
+            <li key={index}>{like.name}</li>
+          ))}
+        </ul>
 
       {/* Display comments */}
       <h2>Comments</h2>

@@ -184,10 +184,14 @@ exports.getChallengesByTag = async (req, res) => {
   // Add a like to a challenge
 exports.likeChallenge = async (req, res) => {
   try {
-    const challengeId = req.params.id;
+    const challengeId = req.params.challengeId;
+    console.log(challengeId);
     const userId = req.user.id; // Assuming you have the user's ID from the token
+    console.log(userId);
+
 
     const challenge = await Challenge.findById(challengeId);
+    console.log(challenge);
 
     if (!challenge.likes.includes(userId)) {
       challenge.likes.push(userId);
