@@ -1,11 +1,12 @@
 import React, { useState, useContext } from 'react';
 import ChallengeService from '../../Services/ChallengesServices'; // Adjust the path if needed
-import UserContext from '../../UserContext'; // import UserContext
+import UserContext from '../../UserContext'; // Import UserContext
 
 const CreateChallengePage = () => {
   const [title, setTitle] = useState('');
   const [complexity, setComplexity] = useState('Bronze');
   const [tags, setTags] = useState('');
+  const [comment, setComment] = useState(''); // State for the comment
   const { user } = useContext(UserContext);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -16,19 +17,16 @@ const CreateChallengePage = () => {
     // Split tags by comma and trim each tag
     const tagsArray = tags.split(',').map(tag => tag.trim());
 
-    console.log(user)
     const challengeData = {
       title,
       complexity,
       tags: tagsArray,
-      // author: user.id, // Assuming user object contains _id
+      // Include comment in the challenge data
+      // Assuming your backend is set up to accept comments as part of challenge creation
+      comment, 
     };
 
     try {
-      console.log(title);
-      console.log(complexity);
-      console.log(tags);
-      // console.log(user._id);
       const response = await ChallengeService.createChallenge(challengeData, user.token);
       
       if (response && response.data) {
@@ -37,10 +35,10 @@ const CreateChallengePage = () => {
         setTitle('');
         setComplexity('Bronze');
         setTags('');
+        setComment(''); // Reset comment field
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Error creating challenge');
-      console.log(err)
     }
   };
 
@@ -75,6 +73,13 @@ const CreateChallengePage = () => {
             type="text"
             value={tags}
             onChange={(e) => setTags(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Comment:</label>
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
           />
         </div>
         <button type="submit">Create Challenge</button>

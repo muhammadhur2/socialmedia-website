@@ -52,8 +52,38 @@ class ChallengeService {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     return axios.get(`${API_URL}/byComplexity/${complexity}`, config);
   }
+
+  async createComment(challengeId, commentData, token) {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    console.log(API_URL);
+    console.log(challengeId);
+    console.log(commentData);
+    return axios.post(`${API_URL}/${challengeId}/comments/create`, commentData, config);
+  }
+
+  // Get Comments of a Challenge
+  async getComments(challengeId, token) {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    return axios.get(`${API_URL}/${challengeId}/comments`, config);
+  }
+
+  // Update a Comment
+  async updateComment(challengeId, commentId, commentData, token) {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    return axios.put(`${API_URL}/${challengeId}/comments/update/${commentId}`, commentData, config);
+  }
+
+  // Delete a Comment
+  async deleteComment(challengeId, commentId, token) {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    return axios.delete(`${API_URL}/${challengeId}/comments/delete/${commentId}`, config);
+  }
   
   // Add more methods if you need
 }
+
+  
+  // Add more methods if you need
+
 
 export default new ChallengeService();

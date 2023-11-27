@@ -1,4 +1,5 @@
 const Challenge = require('../models/challenge.model'); 
+const CommentModel = require('../models/comment.model'); 
 
 // Create a new Challenge
 exports.createChallenge = async (req, res) => {
@@ -8,7 +9,8 @@ exports.createChallenge = async (req, res) => {
     // Create a new challenge with the request body and set the author field
     const challenge = new Challenge({
       ...req.body,
-      author: userId // Set the author to the logged-in user's ID
+      author: userId, // Set the author to the logged-in user's ID
+      comments: req.body.comments ? req.body.comments : [] // Handle comments
     });
 
     await challenge.save();
@@ -17,8 +19,6 @@ exports.createChallenge = async (req, res) => {
     res.status(400).json({ message: "Error creating challenge", error });
   }
 };
-
-
 // List all Challenges with Filters
 exports.listChallenges = async (req, res) => {
     try {
@@ -64,15 +64,27 @@ exports.listChallenges = async (req, res) => {
 exports.getChallengeById = async (req, res) => {
   try {
     const challenge = await Challenge.findById(req.params.id)
-      .populate('author', 'name');  // Populate the 'author' field with 'name' from 'UserData'
+      .populate('author', 'name') // Populate the challenge's author
+      .populate({
+        path: 'comments', // Populate the comments
+        model: 'Comment', // Ensure this is the correct model name for your comments
+        populate: {
+          path: 'author',
+          model: 'UserData', // Ensure this is the correct model name for your users
+          select: 'name' // Select only the name field of the author
+        }
+      });
 
-      console.log(challenge);
+    if (!challenge) {
+      return res.status(404).json({ message: "Challenge not found" });
+    }
 
     res.status(200).json({ challenge });
   } catch (error) {
-    res.status(400).json({ message: "Challenge not found", error });
+    res.status(400).json({ message: "Error fetching challenge", error });
   }
 };
+
 
 // Update Challenge by ID
 exports.updateChallenge = async (req, res) => {
@@ -125,3 +137,45 @@ exports.getChallengesByTag = async (req, res) => {
       res.status(400).json({ message: "Error fetching challenges by complexity", error });
     }
   };
+
+  // Add a comment to a Challenge
+  exports.addCommentToChallenge = async (req, res) => {
+    try {
+      const challengeId = req.params.challengeId;
+      const userId = req.user.id;
+  
+
+      console.log("first here");
+      // Create a new Comment document
+      const newComment = new CommentModel({
+        text: req.body.text,
+        author: userId
+      });
+
+      console.log(newComment);
+  
+      // Save the comment
+      const savedComment = await newComment.save();
+
+      console.log("reached here");
+  
+      // Find the challenge and update its comments array
+      const challenge = await Challenge.findById(challengeId);
+      console.log(challenge);
+      console.log("also here");
+      if (!challenge) {
+        return res.status(404).json({ message: "Challenge not found" });
+      }
+      console.log("also also  here");
+      // Add the comment's ID to the challenge's comments array
+      challenge.comments.push(savedComment._id);
+  
+      // Save the updated challenge
+      await challenge.save();
+  
+      res.status(200).json({ message: "Comment added", challenge });
+    } catch (error) {
+      res.status(400).json({ message: "Error adding comment", error });
+    }
+  };
+  

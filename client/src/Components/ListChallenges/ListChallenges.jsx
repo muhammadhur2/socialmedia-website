@@ -33,9 +33,14 @@ const ChallengeListPage = () => {
     navigate(`/challenge/${challengeId}`);
   };
 
+  const navigateToCreateChallenge = () => {
+    navigate('/createchallenge'); // Adjust the path as per your routing setup
+  };
+
   return (
     <div>
       <h1>Challenges</h1>
+      <button onClick={navigateToCreateChallenge} style={{ margin: '10px 0' }}>Create New Challenge</button>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
         {challenges.map((challenge) => (
           <div
@@ -44,8 +49,7 @@ const ChallengeListPage = () => {
             onClick={() => handleChallengeClick(challenge._id)}
           >
             <h2>{challenge.title}</h2>
-            {/* Assuming the author's name or relevant information is available */}
-            <p>Author: {challenge.author ? challenge.author.name : 'Unknown'}</p>
+            <p>Author: {challenge.author}</p>
           </div>
         ))}
       </div>
