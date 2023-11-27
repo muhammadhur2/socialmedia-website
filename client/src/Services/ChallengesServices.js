@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = "https://socialmedia-website-three.vercel.app/challenges";  // Replace with your API URL
-// const API_URL = "http://localhost:3001/challenges"
+// const API_URL = "https://socialmedia-website-three.vercel.app/challenges";  // Replace with your API URL
+const API_URL = "http://localhost:3001/challenges"
 
 class ChallengeService {
   
@@ -78,6 +78,26 @@ class ChallengeService {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     return axios.delete(`${API_URL}/${challengeId}/comments/delete/${commentId}`, config);
   }
+
+  // Add a like to a challenge
+async likeChallenge(challengeId, token) {
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  return axios.post(`${API_URL}/${challengeId}/like`, {}, config);
+}
+
+// Remove a like from a challenge
+// Inside ChallengeService
+
+async unlikeChallenge(challengeId, token) {
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  return axios.post(`${API_URL}/${challengeId}/unlike`, {}, config);
+}
+
+async toggleLikeChallenge(challengeId, token) {
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  return axios.post(`${API_URL}/challenges/${challengeId}/toggleLike`, {}, config);
+}
+
   
   // Add more methods if you need
 }

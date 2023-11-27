@@ -49,7 +49,9 @@ const ChallengeListPage = () => {
             onClick={() => handleChallengeClick(challenge._id)}
           >
             <h2>{challenge.title}</h2>
-            <p>Author: {challenge.author}</p>
+            <p>Author: {challenge.author && challenge.author.name ? challenge.author.name : 'Unknown'}</p>
+            <p>Likes: {challenge.likes.length}</p> {/* Display number of likes */}
+            <p>Comments: {challenge.comments.length}</p> {/* Display number of comments */}
           </div>
         ))}
       </div>
