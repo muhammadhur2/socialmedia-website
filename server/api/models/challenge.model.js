@@ -8,7 +8,9 @@ const ChallengeSchema = new mongoose.Schema(
     complexity: { type: String, enum: ['Bronze', 'Silver', 'Gold'], required: true },
     tags: [{ type: String }],
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'UserData', required: true },
-    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }] // Reference to Comment model
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }], // Reference to Comment model
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserData' }]
+
   },
   { collection: 'challenge-data', timestamps: true }
 );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import ChallengeService from '../../Services/ChallengesServices'; // Adjust the path if needed
-import UserContext from '../../UserContext'; // import UserContext
+import ChallengeService from '../../Services/ChallengesServices';
+import UserContext from '../../UserContext';
 
 const ChallengeDetailPage = () => {
   const { challengeId } = useParams();
@@ -32,7 +32,6 @@ const ChallengeDetailPage = () => {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!newComment.trim()) return;
-
     try {
       await ChallengeService.createComment(challengeId, { text: newComment }, user.token);
       setNewComment('');
@@ -44,7 +43,24 @@ const ChallengeDetailPage = () => {
         setError(err.message);
       } finally {
         setIsLoading(false);
-      } // Refresh challenge details to show the new comment
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleLike = async () => {
+    try {
+      await ChallengeService.likeChallenge(challengeId, user.token);
+      try {
+        setIsLoading(true);
+        const response = await ChallengeService.getChallengeById(challengeId, user.token);
+        setChallenge(response.data.challenge);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     } catch (err) {
       setError(err.message);
     }
@@ -73,15 +89,23 @@ const ChallengeDetailPage = () => {
       <p>Author: {challenge.author.name}</p>
       <p>Created At: {new Date(challenge.createdAt).toLocaleString()}</p>
       <p>Updated At: {new Date(challenge.updatedAt).toLocaleString()}</p>
+      
+      <button onClick={handleLike}>Like</button>
+      <h3>Likes: {challenge.likes.length}</h3>
+      <ul>
+        {challenge.likes.map((like, index) => (
+          <li key={index}>{like.name}</li>
+        ))}
+      </ul>
+
       {/* Display comments */}
       <h2>Comments</h2>
       {challenge.comments && challenge.comments.map((comment, index) => (
         <div key={index}>
-          {console.log(comment)}
-          {/* Check if comment.author exists before accessing its properties */}
           <p>{comment.author ? comment.author.name : 'Unknown Author'}: {comment.text}</p>
         </div>
       ))}
+
       {/* Comment Form */}
       <form onSubmit={handleCommentSubmit}>
         <textarea

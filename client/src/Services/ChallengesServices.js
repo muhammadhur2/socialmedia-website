@@ -78,6 +78,19 @@ class ChallengeService {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     return axios.delete(`${API_URL}/${challengeId}/comments/delete/${commentId}`, config);
   }
+
+  // Add a like to a challenge
+async likeChallenge(challengeId, token) {
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  return axios.post(`${API_URL}/${challengeId}/like`, {}, config);
+}
+
+// Remove a like from a challenge
+async unlikeChallenge(challengeId, token) {
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  return axios.post(`${API_URL}/${challengeId}/unlike`, {}, config);
+}
+
   
   // Add more methods if you need
 }

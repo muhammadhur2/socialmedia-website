@@ -65,6 +65,8 @@ exports.getChallengeById = async (req, res) => {
   try {
     const challenge = await Challenge.findById(req.params.id)
       .populate('author', 'name') // Populate the challenge's author
+      .populate('comments.author', 'name')
+      .populate('likes', 'name')
       .populate({
         path: 'comments', // Populate the comments
         model: 'Comment', // Ensure this is the correct model name for your comments
@@ -178,4 +180,42 @@ exports.getChallengesByTag = async (req, res) => {
       res.status(400).json({ message: "Error adding comment", error });
     }
   };
+
+  // Add a like to a challenge
+exports.likeChallenge = async (req, res) => {
+  try {
+    const challengeId = req.params.id;
+    const userId = req.user.id; // Assuming you have the user's ID from the token
+
+    const challenge = await Challenge.findById(challengeId);
+
+    if (!challenge.likes.includes(userId)) {
+      challenge.likes.push(userId);
+      await challenge.save();
+    }
+
+    res.status(200).json({ message: "Challenge liked" });
+  } catch (error) {
+    res.status(400).json({ message: "Error liking challenge", error });
+  }
+};
+
+// Remove a like from a challenge
+exports.unlikeChallenge = async (req, res) => {
+  try {
+    const challengeId = req.params.id;
+    const userId = req.user.id;
+
+    await Challenge.findByIdAndUpdate(challengeId, {
+      $pull: { likes: userId }
+    });
+
+    res.status(200).json({ message: "Challenge unliked" });
+  } catch (error) {
+    res.status(400).json({ message: "Error unliking challenge", error });
+  }
+};
+
+
+
   
