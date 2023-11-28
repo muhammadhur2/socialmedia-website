@@ -1,6 +1,6 @@
 const Challenge = require('../models/challenge.model'); 
 const CommentModel = require('../models/comment.model'); 
-
+const UserModel = require('../models/user.model'); 
 // Create a new Challenge
 exports.createChallenge = async (req, res) => {
   try {
@@ -122,16 +122,52 @@ exports.getChallengesByTag = async (req, res) => {
   exports.getChallengesByAuthor = async (req, res) => {
     try {
       // Validate the authorId to make sure it's a valid ObjectId
+      console.log("here")
       const authorId = req.params.authorId;
-      if (!mongoose.Types.ObjectId.isValid(authorId)) {
-        return res.status(400).json({ message: "Invalid authorId" });
-      }
-  
+      console.log(authorId)
+
+      
+      console.log(authorId)
       // Use ChallengeModel to find the documents
-      const challenges = await ChallengeModel.find({ author: authorId });
+      const challenges = await Challenge.find({ author: authorId });
       res.status(200).json({ challenges });
     } catch (error) {
       res.status(500).json({ message: "Error fetching challenges by author", error });
+    }
+  };
+
+  exports.getChallengesByFriends = async (req, res) => {
+    try {
+      // Extract the user ID from the request body
+      console.log("here")
+      
+      const userId = req.body.id;
+  
+      // Validate that the userId is provided
+      if (!userId) {
+        return res.status(400).json({ status: 'error', error: 'User ID must be provided' });
+      }
+  
+      
+  
+      // Find the user and populate the friends field
+      const user = await UserModel.findById(userId).populate('friends');
+  
+      // Check if the user was found
+      if (!user) {
+        return res.status(404).json({ status: 'error', error: 'User not found' });
+      }
+      
+      // Extract friends IDs
+      const friendsIds = user.friends.map(friend => friend._id);
+  
+      // Find all challenges where the author is in the friends list
+      const challenges = await Challenge.find({ author: { $in: friendsIds } }).populate('author', 'name');
+  
+      res.json({ status: 'ok', challenges });
+    } catch (err) {
+      console.error(err); // Log the error to the console for debugging
+      res.status(500).json({ status: 'error', error: 'Error fetching challenges by friends' });
     }
   };
   // Get Challenges by Complexity

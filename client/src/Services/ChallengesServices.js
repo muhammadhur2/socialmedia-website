@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { API_BASE} from  '../global'
 const API_URL = "https://socialmedia-website-three.vercel.app/challenges";  // Replace with your API URL
 // const API_URL = "http://localhost:3001/challenges"
 

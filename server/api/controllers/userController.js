@@ -210,7 +210,32 @@ exports.sendFriendRequest = async (req, res) => {
       res.json({ status: 'error', error: 'Error listing friends' });
     }
   };
-
+  exports.listFriends2 = async (req, res) => {
+    try {
+      // Extract the user ID from the request body
+      const userId = req.body.id;
+      
+      // Validate that the userId is provided
+      if (!userId) {
+        return res.status(400).json({ status: 'error', error: 'User ID must be provided' });
+      }
+  
+      
+  
+      const user = await User.findById(userId).populate('friends', '-password');
+      
+      // Check if the user was found
+      if (!user) {
+        return res.status(404).json({ status: 'error', error: 'User not found' });
+      }
+      
+      res.json({ status: 'ok', friends: user.friends });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ status: 'error', error: 'Error listing friends' });
+    }
+  };
+  
   exports.listFriendRequests = async (req, res) => {
     const userId = req.user.id;
   

@@ -16,6 +16,7 @@ router.post('/sendfriendrequest', verifyToken, userController.sendFriendRequest)
 router.post('/acceptfriendrequest', verifyToken, userController.acceptFriendRequest);
 router.post('/rejectfriendrequest', verifyToken, userController.rejectFriendRequest);
 router.get('/listfriends', verifyToken, userController.listFriends);
+router.post('/listfriendspost', verifyToken, userController.listFriends2);
 router.get('/listfriendrequests', verifyToken, userController.listFriendRequests);
 router.get('/searchFriends', verifyToken, userController.searchFriends);
 
