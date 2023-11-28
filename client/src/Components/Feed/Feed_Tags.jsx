@@ -39,7 +39,7 @@ const Feed_Tags = ({ tag }) => {
           <Box key={challenge._id} sx={{ my: 2 }}>
             <ChallengeCard
               title={challenge.title}
-              date={new Date(challenge.createdAt).toLocaleDateString()}
+              date={new Date(challenge.createdAt).toLocaleString()}
               avatarUrl="https://example.com/path-to-avatar.jpg" // Replace with actual avatar URL if available
               description={challenge.description || "No description available."}
               complexity={challenge.complexity}

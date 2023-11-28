@@ -66,11 +66,14 @@ const ChallengeCard = ({
     ))
   )}
 </CardActions>
-      <CardActions disableSpacing>
-        <Box width="100%" textAlign="center"> {/* Centering Read More button */}
+{
+  /* <CardActions disableSpacing>
+        <Box width="100%" textAlign="center"> 
           <Button size="small" variant="contained" onClick={() => window.location.href = readMoreLink}>Read More</Button>
         </Box>
-      </CardActions>
+      </CardActions> */
+}
+      
     </Card>
   );
 }
