@@ -10,6 +10,7 @@ import ListChallengesPage from './Pages/ListChallengesPage';
 import UserContext from './UserContext';  // import UserContext
 
 import FeedPage from './Pages/FeedPage'; // Make sure this path is correct
+import TagFeedPage from './Pages/TagFeedPage'; // Import the TagFeedPage component
 
 import PrivateRoute from './Routes/PrivateRoute'; // Adjust the path if needed
 import PublicRoute from './Routes/PublicRoute'; // Adjust the path if needed
@@ -60,6 +61,14 @@ function App() {
             element={
               <PrivateRoute>
                 <FeedPage />
+              </PrivateRoute>
+            } 
+          />
+    <Route 
+            path="/feed/tags/:tag" // Route for the TagFeedPage
+            element={
+              <PrivateRoute>
+                <TagFeedPage />
               </PrivateRoute>
             } 
           />

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardHeader, CardMedia, CardContent, CardActions, Typography, Button, Avatar, Box } from '@mui/material';
+import { Link } from 'react-router-dom'; // Import Link
 
 const ChallengeCard = ({
   title,
@@ -51,14 +52,20 @@ const ChallengeCard = ({
         )}
       </CardContent>
       <CardActions disableSpacing sx={{ justifyContent: 'start', flexWrap: 'wrap' }}>
-        {buttonGroup && buttonGroup.length > 0 && (
-          buttonGroup.map((buttonLabel, index) => (
-            <Button key={index} size="small" variant="outlined" sx={{ m: 0.5 }}>
-              {buttonLabel}
-            </Button>
-          ))
-        )}
-      </CardActions>
+  {buttonGroup && buttonGroup.length > 0 && (
+    buttonGroup.map((buttonLabel, index) => (
+      <Link 
+        key={index} 
+        to={`/feed/tags/${buttonLabel}`} // Use template literals to insert the button label
+        style={{ textDecoration: 'none' }} // Optional: to remove the underline of links
+      >
+        <Button size="small" variant="outlined" sx={{ m: 0.5 }}>
+          {buttonLabel}
+        </Button>
+      </Link>
+    ))
+  )}
+</CardActions>
       <CardActions disableSpacing>
         <Box width="100%" textAlign="center"> {/* Centering Read More button */}
           <Button size="small" variant="contained" onClick={() => window.location.href = readMoreLink}>Read More</Button>
