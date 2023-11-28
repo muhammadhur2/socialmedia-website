@@ -19,6 +19,8 @@ router.post('/challenges/:id/toggleLike', verifyToken, challengeController.toggl
 
 // The rest of your routes...
 router.get('/list', verifyToken, challengeController.listChallenges);
+router.post('/challengesByFriends', verifyToken, challengeController.getChallengesByFriends);
+
 router.get('/:id', verifyToken, challengeController.getChallengeById);
 router.put('/update/:id', verifyToken, challengeController.updateChallenge);
 router.delete('/delete/:id', verifyToken, challengeController.deleteChallenge);
