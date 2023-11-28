@@ -10,12 +10,19 @@ const skillBadgeRoutes = require('./api/routes/skillbadgeRoutes')
 // const { updateProfile, getProfile } = require('./controllers/userController');
 // const { verifyToken } = require('./utils/jwtHelper');
 
+// Firebase Storage Import
+const { getStorage } = require("firebase/storage");
+const firebaseConfig = require('./api/config/firebase');
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
 mongoose.connect();
+
+// Initialize Firebase Storage
+const storage = getStorage(firebaseConfig);
 
 //testing jenkins
 // Then, define the general route
