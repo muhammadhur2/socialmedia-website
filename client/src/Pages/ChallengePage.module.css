@@ -1,0 +1,12 @@
+/* ChallengePage.module.css */
+.cardContainer {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .card {
+    max-width: 24rem;
+    margin: auto; /* Center the card in the flex container */
+  }
+  

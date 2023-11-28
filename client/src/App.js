@@ -9,6 +9,7 @@ import CreateChallengePage from './Pages/CreateChallengePage';
 import ListChallengesPage from './Pages/ListChallengesPage';
 import UserContext from './UserContext';  // import UserContext
 
+import FeedPage from './Pages/FeedPage'; // Make sure this path is correct
 
 import PrivateRoute from './Routes/PrivateRoute'; // Adjust the path if needed
 import PublicRoute from './Routes/PublicRoute'; // Adjust the path if needed
@@ -54,6 +55,14 @@ function App() {
       </PrivateRoute>
     } 
   />
+   <Route 
+            path="/feed" 
+            element={
+              <PrivateRoute>
+                <FeedPage />
+              </PrivateRoute>
+            } 
+          />
   <Route 
     path="/challenge" 
     element={

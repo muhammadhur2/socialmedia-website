@@ -98,12 +98,34 @@ async toggleLikeChallenge(challengeId, token) {
   return axios.post(`${API_URL}/challenges/${challengeId}/toggleLike`, {}, config);
 }
 
-  
+async getChallengesByFriends(userId, token) {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+  console.log("her")
+  console.log(userId)
+
+  console.log(token)
+  const body = {
+    id: userId
+  };
+
+  try {
+    const response = await axios.post(`${API_URL}/challengesByFriends`, body, config);
+    console.log(response.data); // Assuming you want to log the response for debugging
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching challenges by friends:', error);
+    throw error;
+  }
+}
+
   // Add more methods if you need
 }
 
   
-  // Add more methods if you need
 
 
 export default new ChallengeService();
