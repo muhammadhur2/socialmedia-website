@@ -4,6 +4,7 @@ import UserContext from '../../UserContext';
 import { useParams } from 'react-router-dom';
 import ChallengeCard from '../../Components/Challenges_Post/ChallengeCard';
 import Box from '@mui/material/Box';
+import userService from '../../Services/UserService';
 
 const Feed = () => {
   const [challenges, setChallenges] = useState([]);
@@ -15,9 +16,12 @@ const Feed = () => {
       try {
         // const profileUserId = user?.id;
          // Use the user ID from the context
-        const profileUserId = "655f2ae9b99ccbd21ecca9a9"; // Placeholder user ID
+       // const profileUserId = "655f2ae9b99ccbd21ecca9a9"; // Placeholder user ID
         const token = user?.token;
-
+       const response2 = await userService.getProfile(token);
+       console.log("pakistan")
+        console.log(response2.data.user._id)
+        const profileUserId = response2.data.user._id;
         const data = await ChallengeService.getChallengesByFriends(profileUserId, token);
         if (data.status === 'ok') {
           setChallenges(data.challenges);

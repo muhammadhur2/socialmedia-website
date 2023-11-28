@@ -31,6 +31,7 @@ export default function LoginSignup() {
       const responseData = await userService.login({ email, password });
       if (responseData.status === 'ok') {
         localStorage.setItem('token', responseData.token);
+        
         setUser({
           token: responseData.token
         });

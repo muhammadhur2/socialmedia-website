@@ -27,13 +27,14 @@ class UserService {
 
 
 
-async getProfile(userId) {
-  const token = localStorage.getItem('token');
+async getProfile(token) {
+  
   const config = { headers: { Authorization: `Bearer ${token}` } };
 
   // Construct the URL using the userId parameter
-  const url = userId ? `${API_URL}/profile/${userId}` : `${API_URL}/profile`;
+  const url =  `${API_URL}/profile`;
   console.log(`Request URL: ${url}`);
+  console.log(`Request token: ${token}`);
 
   return axios.get(url, config);
 }
