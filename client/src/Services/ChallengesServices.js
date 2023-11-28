@@ -43,6 +43,10 @@ class ChallengeService {
 
   // Get Challenges by Author
   async getChallengesByAuthor(authorId, token) {
+    console.log("getChallengesByAuthorlog: ")
+    console.log(authorId)
+    console.log(token)
+
     const config = { headers: { Authorization: `Bearer ${token}` } };
     return axios.get(`${API_URL}/byAuthor/${authorId}`, config);
   }

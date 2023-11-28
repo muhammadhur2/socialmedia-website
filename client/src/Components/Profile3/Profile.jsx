@@ -4,6 +4,7 @@ import { Box, Button, Card, CardContent, CardMedia, Container, Grid, Typography,
 import userService from '../../Services/UserService';
 import UserContext from '../../UserContext';
 import { useParams, useNavigate } from 'react-router-dom';
+import Feed from '../Feed/My_Posts';  // Adjust the path if needed
 
 export default function ProfilePage() {
   const { userId } = useParams(); // Get the user identifier from URL
@@ -19,7 +20,7 @@ export default function ProfilePage() {
     const fetchProfile = async () => {
       try {
         const profileUserId = userId || user.id; // Use URL userId or fallback to logged-in user's id
-        const response = await userService.getProfile(profileUserId, user.token);
+        const response = await userService.getProfile( user.token);
         if (response.data.status === 'ok') {
           setProfileData(response.data.user);
         }
@@ -191,13 +192,13 @@ export default function ProfilePage() {
                   </Typography>
                 </Box>
                 <Box className={styles.recentPhotosHeader} sx={{ mb: 4 }}>
-                  <Typography variant="h6">Recent photos</Typography>
+                  <Typography variant="h6">Posts</Typography>
                   <Typography component="a" href="#!" color="primary">
                     Show all
                   </Typography>
                 </Box>
-                <Grid container spacing={2}>
-                  {/* Repeat this Grid item for each image */}
+                {/* <Grid container spacing={2}>
+                 
                   <Grid item xs={6} className={styles.imageItem}>
                     <CardMedia
                       component="img"
@@ -205,8 +206,11 @@ export default function ProfilePage() {
                       alt="image 1"
                     />
                   </Grid>
-                  {/* ... other images */}
-                </Grid>
+                 
+                </Grid> */}
+                 <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}> 
+        <Feed />
+      </div>
               </CardContent>
             </Card>
           </Grid>
