@@ -36,7 +36,7 @@ export default function LoginSignup() {
           token: responseData.token
         });
        
-        navigate('/profile');
+        navigate('/feed');
       } else {
         window.alert('Login Failed');
       }

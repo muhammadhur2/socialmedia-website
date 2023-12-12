@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import ChallengeService from '../../Services/ChallengesServices';
 import UserContext from '../../UserContext';
-import { useParams } from 'react-router-dom';
 import ChallengeCard from '../../Components/Challenges_Post/ChallengeCard';
 import Box from '@mui/material/Box';
 import userService from '../../Services/UserService';
@@ -10,21 +10,20 @@ const Feed = () => {
   const [challenges, setChallenges] = useState([]);
   const [error, setError] = useState(null);
   const { user } = useContext(UserContext);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     const fetchChallenges = async () => {
       try {
-        // const profileUserId = user?.id;
-         // Use the user ID from the context
-       // const profileUserId = "655f2ae9b99ccbd21ecca9a9"; // Placeholder user ID
         const token = user?.token;
-       const response2 = await userService.getProfile(token);
-       console.log("pakistan")
-        console.log(response2.data.user._id)
+        const response2 = await userService.getProfile(token);
         const profileUserId = response2.data.user._id;
         const data = await ChallengeService.getChallengesByFriends(profileUserId, token);
         if (data.status === 'ok') {
-          setChallenges(data.challenges);
+          const sortedChallenges = data.challenges.sort((a, b) => 
+            new Date(b.createdAt) - new Date(a.createdAt)
+          );
+          setChallenges(sortedChallenges);
         } else {
           setError('Failed to fetch challenges.');
         }
@@ -38,15 +37,34 @@ const Feed = () => {
     }
   }, [user]);
 
+  const navigateToChallenge = (challengeId) => {
+    console.log(challengeId);
+    navigate(`/challenge/${challengeId}`);
+  };
+
+  const timeSince = (date) => {
+    const now = new Date();
+    const challengeDate = new Date(date);
+    const difference = now - challengeDate;
+    const minutes = Math.floor(difference / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (minutes < 60) return `${minutes} minutes ago`;
+    if (hours < 24) return `${hours} hours ago`;
+    return `${days} days ago`;
+  };
+
   return (
     <Box sx={{ maxWidth: '600px', mx: 'auto', my: 2 }}>
       {error && <p>Error: {error}</p>}
       {!error && challenges.length > 0 ? (
         challenges.map((challenge) => (
-          <Box key={challenge._id} sx={{ my: 2 }}>
+          <Box key={challenge._id} sx={{ my: 2 }} onClick={() => navigateToChallenge(challenge._id)} style={{ cursor: 'pointer' }}>
             <ChallengeCard
-              title={challenge.title}
-              date={new Date(challenge.createdAt).toLocaleString()}
+              title={`${challenge.title} - ${timeSince(challenge.createdAt)}`}
+              author={challenge.authorName} // Replace with the actual property name for the author's name
+              date={challenge.author.name}
               avatarUrl="https://example.com/path-to-avatar.jpg" // Replace with actual avatar URL if available
               description={challenge.description || "No description available."}
               complexity={challenge.complexity}

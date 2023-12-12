@@ -6,7 +6,7 @@ const CreateChallengePage = () => {
   const [title, setTitle] = useState('');
   const [complexity, setComplexity] = useState('Bronze');
   const [tags, setTags] = useState('');
-  const [comment, setComment] = useState(''); // State for the comment
+  const [description, setDescription] = useState(''); // State for the description
   const { user } = useContext(UserContext);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -21,9 +21,9 @@ const CreateChallengePage = () => {
       title,
       complexity,
       tags: tagsArray,
-      // Include comment in the challenge data
-      // Assuming your backend is set up to accept comments as part of challenge creation
-      comment, 
+      // Include description in the challenge data
+      // Assuming your backend is set up to accept description as part of challenge creation
+      description, 
     };
 
     try {
@@ -35,7 +35,7 @@ const CreateChallengePage = () => {
         setTitle('');
         setComplexity('Bronze');
         setTags('');
-        setComment(''); // Reset comment field
+        setDescription(''); // Reset description field
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Error creating challenge');
@@ -76,10 +76,10 @@ const CreateChallengePage = () => {
           />
         </div>
         <div>
-          <label>Comment:</label>
+          <label>Description:</label>
           <textarea
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </div>
         <button type="submit">Create Challenge</button>

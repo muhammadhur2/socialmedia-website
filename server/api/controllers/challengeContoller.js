@@ -263,22 +263,29 @@ exports.toggleLikeChallenge = async (req, res) => {
   const userId = req.user.id; // Extract user ID from the token
 
   try {
+    // console.log("Trying to like maybe")
     const challenge = await Challenge.findById(challengeId);
-
+    // console.log(challengeId);
     if (!challenge) {
       return res.status(404).json({ message: "Challenge not found" });
     }
 
     const likeIndex = challenge.likes.indexOf(userId);
     if (likeIndex > -1) {
+      // console.log("Trying to like maybe");
       challenge.likes.splice(likeIndex, 1); // User has liked, so unlike
     } else {
+      // console.log(challenge.likes);
       challenge.likes.push(userId); // User hasn't liked, so like
+      // console.log(challenge.likes);
+      // console.log("Trying");
     }
-
+    
     await challenge.save();
+    console.log("Trying2");
     res.status(200).json({ message: "Challenge like toggled" });
   } catch (error) {
+    console.log("Trying to like hahaha");
     res.status(400).json({ message: "Error toggling challenge like", error });
   }
 };
