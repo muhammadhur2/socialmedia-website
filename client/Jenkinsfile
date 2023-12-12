@@ -45,8 +45,8 @@ pipeline {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws']]) {
                     sh '''#!/bin/bash
                         cd client
-                        aws s3 sync ./build/ s3://skillsphere-frontend/
-                        aws cloudfront create-invalidation --distribution-id "E2VMFQV49YRWAU" --paths "/*"
+                        aws s3 sync ./build/ s3://skillsphere-s3/
+                        aws cloudfront create-invalidation --distribution-id "E2LA1JTPDTOT40" --paths "/*"
                     '''
                 }
             }
