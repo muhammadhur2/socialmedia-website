@@ -1,16 +1,14 @@
 pipeline {
     agent any 
 
-    // Specify the Node.js tool
-    tools {
-        nodejs 'node' // Use the Node.js installation named 'node'
-    }
-
     stages {
         stage('Check Node.js version') {
             steps {
-                // Use the Node.js tool
-                sh 'node -v'
+                // Use the NodeJS plugin to set up Node environment
+                nodejs('node') {
+                    sh 'node -v'
+                    sh 'npm -v'
+                }
             }
         }
         stage('Checkout SCM') {
@@ -33,13 +31,16 @@ pipeline {
                 }
             }
             steps {
-                sh '''
-                   echo Build started on `date`
-                   cd client
-                   npm install
-                   npm run build
-                   ls
-                 '''
+                // Use the NodeJS plugin
+                nodejs('node') {
+                    sh '''
+                        echo Build started on `date`
+                        cd client
+                        npm install
+                        npm run build
+                        ls
+                    '''
+                }
             }   
         }
         stage('Update to S3 and Cloudfront Invalidation') {
@@ -50,11 +51,14 @@ pipeline {
             }
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws']]) {
-                    sh '''#!/bin/bash
-                        cd client
-                        aws s3 sync ./build/ s3://skillsphere-s3/
-                        aws cloudfront create-invalidation --distribution-id "E2LA1JTPDTOT40" --paths "/*"
-                    '''
+                    // Use the NodeJS plugin
+                    nodejs('node') {
+                        sh '''#!/bin/bash
+                            cd client
+                            aws s3 sync ./build/ s3://skillsphere-s3/
+                            aws cloudfront create-invalidation --distribution-id "E2LA1JTPDTOT40" --paths "/*"
+                        '''
+                    }
                 }
             }
         }
