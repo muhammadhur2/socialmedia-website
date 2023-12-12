@@ -8,7 +8,7 @@ exports.generateToken = (user) => {
             email: user.email
         },
         process.env.SECRET,
-        { expiresIn: '1m' }  // Expires in one hour
+        { expiresIn: '1h' }  // Expires in one hour
     );
 };
 
