@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import UserContext from '../UserContext';
 import  isTokenValid  from './CheckValidity';
 
-const PublicRoute = ({ children, redirectTo = '/profile' }) => {
+const PublicRoute = ({ children, redirectTo = '/feed' }) => {
   const { user } = useContext(UserContext);
   const isValidToken = user && user.token && isTokenValid(user.token);
   return !isValidToken ? children : <Navigate to={redirectTo} />;
