@@ -1,8 +1,15 @@
 pipeline {
     agent any 
+
+    // Specify the Node.js tool
+    tools {
+        nodejs 'node' // Use the Node.js installation named 'node'
+    }
+
     stages {
         stage('Check Node.js version') {
             steps {
+                // Use the Node.js tool
                 sh 'node -v'
             }
         }
