@@ -11,9 +11,9 @@ export default function ProfilePage() {
   console.log(userId)
 
   const { user, setUser } = useContext(UserContext);
-  const [profileData, setProfileData] = useState({ name: '', email: '' });
+  const [profileData, setProfileData] = useState({ name: '', email: '', about: '' , friends: ''});  
   const [isEditing, setIsEditing] = useState(false);
-  const [editData, setEditData] = useState({ name: '', email: '' });
+  const [editData, setEditData] = useState({ name: '', email: '', about: '' });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +23,7 @@ export default function ProfilePage() {
         const response = await userService.getProfile( user.token);
         if (response.data.status === 'ok') {
           setProfileData(response.data.user);
+          setEditData({ name: response.data.user.name, email: response.data.user.email, about: response.data.user.about }); // Set initial edit data
         }
       } catch (error) {
         console.error("Error fetching profile", error);
@@ -165,7 +166,7 @@ export default function ProfilePage() {
     <Grid item>
   <Grid container justifyContent="flex-end" alignItems="center" textAlign="center" spacing={2}> {/* Adjust the spacing value as needed */}
     <Grid item className={styles.statItem}>
-      <Typography variant="h5">123</Typography>
+      <Typography variant="h5">{profileData.friends.length}</Typography>
       <Typography variant="caption">Friends</Typography>
     </Grid>
     <Grid item className={styles.statItem}>
@@ -179,18 +180,25 @@ export default function ProfilePage() {
 
               {/* ...CardContent and other components... */}
               <CardContent>
-                <Box className={styles.aboutSection} sx={{ p: 4 }}>
-                  <Typography variant="h6">About</Typography>
-                  <Typography variant="body1" color="textSecondary" className="font-italic mb-1">
-                    Web Developer
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary" className="font-italic mb-1">
-                    Lives in New York
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary" className="font-italic mb-0">
-                    Photographer
-                  </Typography>
-                </Box>
+      <Box className={styles.aboutSection} sx={{ p: 4 }}>
+        <Typography variant="h6">About</Typography>
+        {isEditing ? (
+          <TextField
+            variant="outlined"
+            multiline
+            rows={4}
+            value={editData.about}
+            onChange={handleInputChange}
+            name="about"
+            fullWidth
+            margin="normal"
+          />
+        ) : (
+          <Typography variant="body1" color="textSecondary" className="font-italic mb-1">
+            {profileData.about}
+          </Typography>
+        )}
+      </Box>
                 <Box className={styles.recentPhotosHeader} sx={{ mb: 4 }}>
                   <Typography variant="h6">Posts</Typography>
                   <Typography component="a" href="#!" color="primary">

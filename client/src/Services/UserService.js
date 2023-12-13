@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = "https://socialmedia-website-three.vercel.app/users";  // Replace with your API URL
-// const API_URL = "http://localhost:3001/users";  // Replace with your API URL
+// const API_URL = "https://socialmedia-website-three.vercel.app/users";  // Replace with your API URL
+const API_URL = "http://localhost:3001/users";  // Replace with your API URL
 
 class UserService {
   async register(userData) {
@@ -40,6 +40,7 @@ async getProfile(token) {
 }
 
   async updateProfile(userData, token) {
+    console.log(userData);
     const config = { headers: { Authorization: `Bearer ${token}` } };
     return axios.put(`${API_URL}/updateProfile`, userData, config);
   }
