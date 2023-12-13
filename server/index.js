@@ -5,14 +5,11 @@ const cors = require('cors');
 const mongoose = require('./api/config/mongoose');
 const userRoutes = require('./api/routes/userRoutes');
 const postRoutes = require('./api/routes/postRoutes');
+const imageRoutes = require('./api/routes/imageRoutes'); 
 const challengeRoutes = require('./api/routes/challengeRoutes')
 const skillBadgeRoutes = require('./api/routes/skillbadgeRoutes')
-// const { updateProfile, getProfile } = require('./controllers/userController');
-// const { verifyToken } = require('./utils/jwtHelper');
 
-// Firebase Storage Import
-// const { getStorage } = require("firebase/storage");
-// const firebaseConfig = require('./api/config/firebase');
+
 
 const app = express();
 
@@ -21,15 +18,14 @@ app.use(express.json());
 
 mongoose.connect();
 
-// Initialize Firebase Storage
-// const storage = getStorage(firebaseConfig);
 
-//testing jenkins
-// Then, define the general route
 app.use('/users', userRoutes);
 app.use('/posts', postRoutes);
 app.use('/challenges', challengeRoutes);
 app.use('/skillbadges', skillBadgeRoutes);
+app.use('/images', imageRoutes);
+app.use('/uploads', express.static('uploads'));
+
 
 app.get('/hello', (req, res) => {
     res.send('Hello World');

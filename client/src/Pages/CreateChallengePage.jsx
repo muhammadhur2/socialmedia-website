@@ -6,6 +6,8 @@ import CreateChallenge from '../Components/CreateChallenge/CreateChallenge'
 // import FriendsPage from '../Components/Friends/Friends';
 // import Challenge from '../Components/Challenge/Challenge
 import TemporaryDrawer from '../Components/sidebar_material/sidebar'
+import ImageUploadComponent from '../Components/imageUploads/ImageUploadComponent'; // Adjust the path if needed
+
 
 
 const CreateChallengePage = () => {
@@ -20,7 +22,9 @@ const CreateChallengePage = () => {
       <TemporaryDrawer isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />
       {/* <FriendsPage /> */}
       {/* <Challenge/> */}
-      <CreateChallenge/>
+      {/* <CreateChallenge/> */}
+      <ImageUploadComponent />
+
     </div>
   );
 };
