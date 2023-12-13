@@ -22,7 +22,7 @@ const CreateChallengePage = () => {
       <TemporaryDrawer isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />
       {/* <FriendsPage /> */}
       {/* <Challenge/> */}
-      {/* <CreateChallenge/> */}
+      <CreateChallenge/>
       <ImageUploadComponent />
 
     </div>
