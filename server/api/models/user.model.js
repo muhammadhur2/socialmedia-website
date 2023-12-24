@@ -8,7 +8,9 @@ const UserSchema = new mongoose.Schema(
         friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserData' }],
         incomingRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserData' }],
         outgoingRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserData' }],
-        profilePicture: { type: String, default: '' } // Add this line
+        profilePicture: { type: String, default: '' }, // Add this line
+        about:{type: String}
+    
     },
     { collection: 'user-data' }
 );
