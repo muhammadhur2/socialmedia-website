@@ -1,11 +1,17 @@
 import axios from 'axios';
 
-const API_URL = "https://socialmedia-website-three.vercel.app/users";  // Replace with your API URL
-// const API_URL = "http://localhost:3001/users";  // Replace with your API URL
+// const API_URL = "https://socialmedia-website-three.vercel.app/users";  // Replace with your API URL
+const API_URL = "http://localhost:3001/users";  // Replace with your API URL
 
 class UserService {
   async register(userData) {
-    return axios.post(`${API_URL}/register`, userData);
+    // Assuming the server expects multipart/form-data
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    };
+    return axios.post(`${API_URL}/register`, userData, config);
   }
 
   // async login(credentials) {

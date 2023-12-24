@@ -45,7 +45,14 @@ export default function LoginSignup() {
     }
   };
 
-  const handleSignup = async (name, email, password) => {
+  const handleSignup = async (event) => {
+    event.preventDefault();
+    
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const password = formData.get('password');
+    
     if (!isValidName(name)) {
       window.alert('Name should be at least 2 characters.');
       return;
@@ -58,14 +65,17 @@ export default function LoginSignup() {
       window.alert('Password should be at least 6 characters long.');
       return;
     }
+  
+    // No need to manually append fields to formData
+    // The profile picture is already included in formData
+  
     try {
-      const response = await userService.register({ name, email, password });
+      const response = await userService.register(formData);
       console.log(response);
       const responseData = response.data;
   
       if (responseData.status === 'ok') {
-        
-        handleLogin(email,password);
+        handleLogin(email, password);
       } else {
         window.alert('Signup Failed');
       }
@@ -73,21 +83,19 @@ export default function LoginSignup() {
       window.alert('An error occurred during signup', error);
     }
   };
-
-
+  
   const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const email = data.get('email');
-    const password = data.get('password');
-    const name = action === "Signup" ? data.get('name') : "";
-
     if (action === "Login") {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      const email = data.get('email');
+      const password = data.get('password');
       handleLogin(email, password);
     } else {
-      handleSignup(name, email, password);
+      handleSignup(event);
     }
   };
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -148,6 +156,13 @@ export default function LoginSignup() {
                 id="password"
                 autoComplete="current-password"
               />
+              <input
+      accept="image/*"
+      type="file"
+      id="profile-picture"
+      name="image"
+      style={{ marginTop: '20px' }}
+    />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"

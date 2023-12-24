@@ -15,15 +15,17 @@ exports.register = [
           return res.status(400).json({ errors: errors.array() });
       }
 
-      try {
-          const hashedPassword = await bcrypt.hashPassword(req.body.password);
-          await User.create({
-              name: req.body.name,
-              email: req.body.email,
-              password: hashedPassword
-          });
-          res.json({ status: 'ok' });
-      } catch (err) {
+      const imageUrl = req.fileUrl; // Access the uploaded image URL
+        try {
+            const hashedPassword = await bcrypt.hashPassword(req.body.password);
+            await User.create({
+                name: req.body.name,
+                email: req.body.email,
+                password: hashedPassword,
+                profilePicture: imageUrl // Save the image URL with the user
+            });
+            res.json({ status: 'ok' });
+        } catch (err) {
           console.log(err);
           res.json({ status: 'error', error: 'Error' });
       }

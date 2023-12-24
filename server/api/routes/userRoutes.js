@@ -3,8 +3,15 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const { verifyToken } = require('../utils/jwtHelper');
 const { updateProfile, getProfile, deleteAccount } = require('../controllers/userController');
+const imageUploadController = require('../controllers/imageUploadController'); // Adjust the path
+const upload = require('../utils/uploads'); // Import the Multer configuration
 
-router.post('/register', userController.register);
+
+router.post('/register', (req, res, next) => {
+    console.log("Incoming request body:", req.body);
+    console.log("Incoming files:", req.files); // This might be undefined at this point
+    next();
+}, upload.single('image'), imageUploadController.uploadImage, userController.register);
 router.post('/login', userController.login);
 router.get('/profile/:userId', getProfile);
 router.get('/profile', verifyToken, getProfile);

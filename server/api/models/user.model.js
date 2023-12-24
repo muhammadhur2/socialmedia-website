@@ -7,8 +7,8 @@ const UserSchema = new mongoose.Schema(
         password: { type: String, required: true },
         friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserData' }],
         incomingRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserData' }],
-        outgoingRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserData' }]
-    
+        outgoingRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserData' }],
+        profilePicture: { type: String, default: '' } // Add this line
     },
     { collection: 'user-data' }
 );
