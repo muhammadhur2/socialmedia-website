@@ -40,6 +40,7 @@ async getProfile(token) {
 }
 
   async updateProfile(userData, token) {
+    console.log(userData);
     const config = { headers: { Authorization: `Bearer ${token}` } };
     return axios.put(`${API_URL}/updateProfile`, userData, config);
   }

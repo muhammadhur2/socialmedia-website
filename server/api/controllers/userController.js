@@ -90,6 +90,7 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = [
   body('name').optional().trim().isLength({ min: 1 }).withMessage('Name is required'),
   body('email').optional().isEmail().withMessage('Invalid email format'),
+  body('about').optional().trim().isLength({ min: 1 }).withMessage('About section cannot be empty'), // Validate the 'about' field
 
   async (req, res) => {
       const errors = validationResult(req);
@@ -98,9 +99,15 @@ exports.updateProfile = [
       }
 
       try {
+          const updateData = {
+              name: req.body.name,
+              email: req.body.email,
+              about: req.body.about // Include about field in update
+          };
+
           const updatedUser = await User.findOneAndUpdate(
               { email: req.user.email },
-              { $set: { name: req.body.name, email: req.body.email } },
+              { $set: updateData },
               { new: true, fields: { password: 0 }, w: "majority" }
           );
 

@@ -91,7 +91,7 @@ function App() {
   <Route 
     path="/login" 
     element={
-      <PublicRoute redirectTo="/profile">
+      <PublicRoute redirectTo="/feed">
         <LoginPage />
       </PublicRoute>
     } 
