@@ -201,8 +201,7 @@ const AppBar = ( {toggleDrawer} ) => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <MuiAppBar position="static">
-        <Toolbar>
+      <MuiAppBar position="fixed" sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>        <Toolbar>
           <IconButton
             size="large"
             edge="start"

@@ -4,6 +4,7 @@ import AppBar_material from '../Components/AppBar_Material/AppBar';  // Adjust t
 // import Profile from '../Components/Profile_Material/Profile';  // Adjust the path if needed
 import FriendsPage from '../Components/Friends/Friends';
 import TemporaryDrawer from '../Components/sidebar_material/sidebar'
+import MainLayout from '../Components/SideApp/MainLayout';
 
 
 const FriendPage = () => {
