@@ -12,6 +12,8 @@ const FriendsPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
+
+  
   useEffect(() => {
     fetchFriends();
     fetchIncomingRequests();
@@ -49,17 +51,32 @@ const FriendsPage = () => {
   };
 
   const handleSearch = async () => {
-    try {
-      const response = await userService.searchFriends(user.token, searchQuery);
-      if (response.data.status === 'ok') {
-        setSearchResults(response.data.users);
-      } else {
-        console.error('Error searching friends:', response.data.error);
-      }
-    } catch (error) {
-      console.error("Error searching friends", error);
+    const token = user?.token;
+    const response2 = await userService.getProfile(token);
+    console.log(response2.data.user._id)
+    if (!searchQuery) {
+        return; // Optionally handle empty search query
     }
-  };
+
+    try {
+      
+        const response = await userService.searchFriends(user.token, searchQuery);
+        if (response.data.status === 'ok') {
+            const filteredResults = response.data.users.filter(u => 
+                u._id !== response2.data.user._id && !friends.some(friend => friend._id === u._id)
+            );
+            setSearchResults(filteredResults);
+        } else {
+            console.error('Error searching friends:', response.data.error);
+            // Optionally handle error in UI
+        }
+    } catch (error) {
+        console.error("Error searching friends", error);
+        // Optionally handle error in UI
+    }
+};
+
+
 
   const handleAcceptRequest = async (friendId) => {
     try {
@@ -103,14 +120,16 @@ const FriendsPage = () => {
 
   return (
     <div className="friends-container">
-      <div className="friends-search">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
+         <div className="friends-search">
+            <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button onClick={handleSearch}>Search</button>
+         </div>
+
+
 
       <div className="friends-list">
         <h2>My Friends</h2>
@@ -130,35 +149,46 @@ const FriendsPage = () => {
       <div className="incoming-requests">
   <h2>Incoming Requests</h2>
   {incomingRequests.map(request => (
-    <div key={request._id}>
+    <div key={request._id} className="request-item">
       <span 
         className="request-name" 
         onClick={() => navigateToProfile(request._id)}
-        style={{ cursor: 'pointer', textDecoration: 'underline' }}
       >
         {request.name}
       </span>
-      <button onClick={() => handleAcceptRequest(request._id)}>Accept</button>
-      <button onClick={() => handleRejectRequest(request._id)}>Reject</button>
+      <div>
+        <button onClick={() => handleAcceptRequest(request._id)}>Accept</button>
+        <button 
+          className="reject"
+          onClick={() => handleRejectRequest(request._id)}
+        >
+          Reject
+        </button>
+      </div>
     </div>
   ))}
 </div>
 
+
 <div className="search-results">
-  <h2>Search Results</h2>
-  {searchResults.map(result => (
-    <div key={result._id}>
-      <span 
-        className="search-result-name" 
-        onClick={() => navigateToProfile(result._id)}
-        style={{ cursor: 'pointer', textDecoration: 'underline' }}
-      >
-        {result.name}
-      </span>
-      <button onClick={() => handleSendRequest(result._id)}>Send Request</button>
-    </div>
-  ))}
+    <h2>Search Results</h2>
+    {searchResults.length === 0 ? (
+        <p>Search results will be shown here.</p>
+    ) : (
+        searchResults.map(result => (
+            <div key={result._id} className="search-item">
+                <span 
+                    className="search-result-name" 
+                    onClick={() => navigateToProfile(result._id)}
+                >
+                    {result.name}
+                </span>
+                <button onClick={() => handleSendRequest(result._id)}>Send Request</button>
+            </div>
+        ))
+    )}
 </div>
+
     </div>
   );
 };
