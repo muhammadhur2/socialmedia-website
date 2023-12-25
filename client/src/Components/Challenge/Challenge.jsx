@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import ChallengeService from '../../Services/ChallengesServices';
 import UserContext from '../../UserContext';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
+import { CircularProgress } from '@mui/material';
 
 const ChallengeDetailPage = () => {
   const { challengeId } = useParams();
@@ -72,7 +73,7 @@ const ChallengeDetailPage = () => {
   }
 
   if (isLoading) {
-    return <div className="container mt-3">Loading...</div>;
+    return <CircularProgress />;
   }
 
   if (error) {

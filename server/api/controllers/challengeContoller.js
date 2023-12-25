@@ -6,10 +6,14 @@ exports.createChallenge = async (req, res) => {
   try {
     const userId = req.user.id; // Get the user ID from the request
 
-    // Create a new challenge with the request body and set the author field
+    // Access the uploaded image URL
+    const pictureUrl = req.file ? req.file.location : null;
+
+    // Create a new challenge with the request body, author field, and picture
     const challenge = new Challenge({
       ...req.body,
       author: userId, // Set the author to the logged-in user's ID
+      picture: pictureUrl, // Save the image URL with the challenge
       comments: req.body.comments ? req.body.comments : [] // Handle comments
     });
 
@@ -122,24 +126,22 @@ exports.getChallengesByTag = async (req, res) => {
   exports.getChallengesByAuthor = async (req, res) => {
     try {
       // Validate the authorId to make sure it's a valid ObjectId
-      console.log("here")
       const authorId = req.params.authorId;
-      console.log(authorId)
-
-      
-      console.log(authorId)
-      // Use ChallengeModel to find the documents
-      const challenges = await Challenge.find({ author: authorId });
+  
+      // Use ChallengeModel to find the documents and populate author's details
+      const challenges = await Challenge.find({ author: authorId })
+                                         .populate('author', 'name profilePicture'); // Add this line
+  
       res.status(200).json({ challenges });
     } catch (error) {
       res.status(500).json({ message: "Error fetching challenges by author", error });
     }
   };
+  
 
   exports.getChallengesByFriends = async (req, res) => {
     try {
       // Extract the user ID from the request body
-      console.log("here")
       
       const userId = req.body.id;
   
@@ -162,7 +164,7 @@ exports.getChallengesByTag = async (req, res) => {
       const friendsIds = user.friends.map(friend => friend._id);
   
       // Find all challenges where the author is in the friends list
-      const challenges = await Challenge.find({ author: { $in: friendsIds } }).populate('author', 'name');
+      const challenges = await Challenge.find({ author: { $in: friendsIds } }).populate('author', 'name profilePicture');
   
       res.json({ status: 'ok', challenges });
     } catch (err) {
@@ -188,7 +190,6 @@ exports.getChallengesByTag = async (req, res) => {
       const userId = req.user.id;
   
 
-      console.log("first here");
       // Create a new Comment document
       const newComment = new CommentModel({
         text: req.body.text,
@@ -200,16 +201,14 @@ exports.getChallengesByTag = async (req, res) => {
       // Save the comment
       const savedComment = await newComment.save();
 
-      console.log("reached here");
-  
       // Find the challenge and update its comments array
       const challenge = await Challenge.findById(challengeId);
       console.log(challenge);
-      console.log("also here");
+
       if (!challenge) {
         return res.status(404).json({ message: "Challenge not found" });
       }
-      console.log("also also  here");
+
       // Add the comment's ID to the challenge's comments array
       challenge.comments.push(savedComment._id);
   

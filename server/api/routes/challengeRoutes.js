@@ -1,13 +1,17 @@
 const express = require('express');
 const challengeController = require('../controllers/challengeContoller'); 
 const { verifyToken } = require('../utils/jwtHelper'); 
+const imageUploadController = require('../controllers/imageUploadController'); // Adjust the path
+const upload = require('../utils/uploads'); // Import the Multer configuration
+
 
 const router = express.Router();
 
 // Existing routes...
 
 // Route for creating a new challenge
-router.post('/create', verifyToken, challengeController.createChallenge);
+router.post('/create', upload.single('picture'), verifyToken, challengeController.createChallenge, imageUploadController.uploadImage);
+
 
 // Route for adding a comment to a challenge
 router.post('/:challengeId/comments/create', verifyToken, challengeController.addCommentToChallenge);

@@ -5,6 +5,7 @@ import UserContext from '../../UserContext';
 import ChallengeCard from '../../Components/Challenges_Post/ChallengeCard';
 import Box from '@mui/material/Box';
 import userService from '../../Services/UserService';
+import { CircularProgress } from '@mui/material';
 
 const Feed = () => {
   const [challenges, setChallenges] = useState([]);
@@ -65,17 +66,17 @@ const Feed = () => {
               title={`${challenge.title} - ${timeSince(challenge.createdAt)}`}
               author={challenge.authorName} // Replace with the actual property name for the author's name
               date={challenge.author.name}
-              avatarUrl="https://example.com/path-to-avatar.jpg" // Replace with actual avatar URL if available
+              avatarUrl={challenge.author.profilePicture || "https://example.com/path-to-avatar.jpg"}
               description={challenge.description || "No description available."}
               complexity={challenge.complexity}
               buttonGroup={challenge.tags}
-              imageUrl="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"
+              imageUrl={challenge.picture || "https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"}
               readMoreLink={`https://example.com/challenges/${challenge._id}`} // Replace with actual link to challenge
             />
           </Box>
         ))
       ) : (
-        !error && <p>No challenges to display.</p>
+        !error && <CircularProgress />
       )}
     </Box>
   );

@@ -18,6 +18,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../../UserContext'; // Adjust path as needed
 import userService from '../../Services/UserService';
+import { CircularProgress } from '@mui/material';
 
 // Search component styles
 const Search = styled('div')(({ theme }) => ({
@@ -235,7 +236,7 @@ const AppBar = ( {toggleDrawer} ) => {
           }
         }}
       />
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <CircularProgress />}
       {/* Render your search results here */}
           <div>
             {searchResults.map(user => (

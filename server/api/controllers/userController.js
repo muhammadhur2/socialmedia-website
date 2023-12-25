@@ -95,34 +95,39 @@ exports.updateProfile = [
   body('about').optional().trim().isLength({ min: 1 }).withMessage('About section cannot be empty'), // Validate the 'about' field
 
   async (req, res) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-          return res.status(400).json({ errors: errors.array() });
-      }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
-      try {
-          const updateData = {
-              name: req.body.name,
-              email: req.body.email,
-              about: req.body.about // Include about field in update
-          };
+    try {
+        const updateData = {
+            name: req.body.name,
+            email: req.body.email,
+            about: req.body.about,
+        };
 
-          const updatedUser = await User.findOneAndUpdate(
-              { email: req.user.email },
-              { $set: updateData },
-              { new: true, fields: { password: 0 }, w: "majority" }
-          );
+        // If there's an uploaded file, update the profile picture URL
+        if (req.file && req.file.location) {
+            updateData.profilePicture = req.file.location;
+        }
 
-          if (updatedUser) {
-              return res.json({ status: 'ok', user: updatedUser });
-          } else {
-              return res.json({ status: 'error', error: 'User not found' });
-          }
-      } catch (err) {
-          console.log("Error in Update: ", err);
-          return res.json({ status: 'error', error: 'Update failed' });
-      }
-  }
+        const updatedUser = await User.findOneAndUpdate(
+            { email: req.user.email }, // Make sure this identifies the correct user
+            { $set: updateData },
+            { new: true, fields: { password: 0 }, w: "majority" }
+        );
+
+        if (updatedUser) {
+            return res.json({ status: 'ok', user: updatedUser });
+        } else {
+            return res.json({ status: 'error', error: 'User not found' });
+        }
+    } catch (err) {
+        console.log("Error in Update: ", err);
+        return res.json({ status: 'error', error: 'Update failed' });
+    }
+}
 ];
 exports.deleteAccount = async (req, res) => {
     try {
