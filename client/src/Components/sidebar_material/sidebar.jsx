@@ -30,12 +30,13 @@ export default function TemporaryDrawer({ isOpen, toggleDrawer }) {
       onKeyDown={() => toggleDrawer(false)}
     >
       <List>
-        {['Friends', 'Challenges', 'Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+        {['Feed','Friends', 'Create Challenge'].map((text, index) => (
           <ListItem key={text} disablePadding>
            <ListItemButton onClick={() => {
               // Navigate based on the text
+              if (text === 'Feed') handleNavigation('/feed');
               if (text === 'Friends') handleNavigation('/friends');
-              if (text === 'Challenges') handleNavigation('/challenge');
+              if (text === 'Create Challenge') handleNavigation('/createchallenge');
             }}>
 <ListItemIcon>
 {/* Conditionally render icons */}
@@ -50,7 +51,7 @@ export default function TemporaryDrawer({ isOpen, toggleDrawer }) {
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+        {[].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               
