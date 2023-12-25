@@ -10,7 +10,8 @@ const ChallengeSchema = new mongoose.Schema(
     description: {type: String},
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'UserData', required: true },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }], // Reference to Comment model
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserData' }]
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserData' }],
+    picture: { type: String, default: '' },
 
   },
   { collection: 'challenge-data', timestamps: true }

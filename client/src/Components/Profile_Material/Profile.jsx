@@ -4,6 +4,7 @@ import UserContext from '../../UserContext';
 import { useNavigate } from 'react-router-dom';
 import { isValidEmail, isValidPassword, isValidName } from '../../utils/Validation';
 import './Profile.css';
+import { CircularProgress } from '@mui/material';
 
 const Profile = () => {
   const { user, setUser } = useContext(UserContext);
@@ -148,7 +149,7 @@ const Profile = () => {
             </div>
           </div>
         ) : (
-          <p>Loading...</p>
+          <CircularProgress />
         )}
       </div>
     </div>

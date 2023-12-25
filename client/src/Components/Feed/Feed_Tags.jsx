@@ -3,6 +3,7 @@ import ChallengeService from '../../Services/ChallengesServices';
 import UserContext from '../../UserContext';
 import ChallengeCard from '../../Components/Challenges_Post/ChallengeCard';
 import Box from '@mui/material/Box';
+import { CircularProgress } from '@mui/material';
 
 const Feed_Tags = ({ tag }) => {
   const [challenges, setChallenges] = useState([]);
@@ -40,7 +41,7 @@ const Feed_Tags = ({ tag }) => {
             <ChallengeCard
               title={challenge.title}
               date={new Date(challenge.createdAt).toLocaleString()}
-              avatarUrl="https://example.com/path-to-avatar.jpg" // Replace with actual avatar URL if available
+              avatarUrl={challenge.author.profilePicture || "https://example.com/path-to-avatar.jpg"}
               description={challenge.description || "No description available."}
               complexity={challenge.complexity}
               buttonGroup={challenge.tags}
@@ -49,7 +50,7 @@ const Feed_Tags = ({ tag }) => {
           </Box>
         ))
       ) : (
-        !error && <p>No challenges to display for tag: {tag}</p>
+        !error && <CircularProgress />
       )}
     </Box>
   );

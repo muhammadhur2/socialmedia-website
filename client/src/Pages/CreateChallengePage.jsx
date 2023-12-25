@@ -23,7 +23,6 @@ const CreateChallengePage = () => {
       {/* <FriendsPage /> */}
       {/* <Challenge/> */}
       <CreateChallenge/>
-      <ImageUploadComponent />
 
     </div>
   );

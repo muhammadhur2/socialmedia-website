@@ -15,7 +15,7 @@ router.post('/register', (req, res, next) => {
 router.post('/login', userController.login);
 router.get('/profile/:userId', getProfile);
 router.get('/profile', verifyToken, getProfile);
-router.put('/updateProfile', verifyToken, updateProfile);
+router.put('/updateProfile', verifyToken, upload.single('profilePicture'), userController.updateProfile);
 router.delete('/deleteAccount', verifyToken, deleteAccount);
 
 

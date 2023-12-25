@@ -7,7 +7,6 @@
   display: flex;
   align-items: center;
   background-color: #000;
-  height: 200px;
 }
 
 .profilePictureBox {
@@ -16,10 +15,22 @@
   flexDirection: 'column';
   alignItems: 'center';
 }
-
+.profilePictureBoxLoading {
+  background: grey !important; 
+  border-radius: 10px;
+  margin: 4rem 1rem 2rem 4rem;
+  display: 'flex';
+  flexDirection: 'column';
+  alignItems: 'center';
+}
+.profileLoader{
+  display: flex;
+}
 .profilePicture {
-  max-width: 100%; /* adjust as needed */
-  max-height: 150px; /* adjust as needed */
+  border-radius: 50%;
+  /* max-width: 100%; adjust as needed */
+  width: 150px !important; /* adjust as needed */
+  height: 150px !important; /* adjust as needed */
   object-fit: contain; /* or cover, depending on the desired effect */
 }
 
@@ -33,6 +44,12 @@
 .userNameBox {
   margin-left: 3rem;
   margin-top: 130px;
+}
+.userNameBoxLoading{
+  border-radius: 10px;
+  margin-left: 1rem;
+  margin-top: 130px;
+  margin-bottom: 20px;
 }
 .statsBox {
   display: flex;

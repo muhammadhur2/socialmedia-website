@@ -7,9 +7,15 @@ class ChallengeService {
   
   // Create a new Challenge
   async createChallenge(challengeData, token) {
-    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+        // Do not set Content-Type here
+      }
+    };
     return axios.post(`${API_URL}/create`, challengeData, config);
   }
+  
 
   // List all Challenges with Filters
   async listChallenges(query, token) {
@@ -27,7 +33,7 @@ class ChallengeService {
   async updateChallenge(id, updateData, token) {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     return axios.put(`${API_URL}/update/${id}`, updateData, config);
-  }
+  }z
 
   // Delete Challenge by ID
   async deleteChallenge(id, token) {
