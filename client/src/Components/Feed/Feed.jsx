@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import {useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import ChallengeService from '../../Services/ChallengesServices';
 import UserContext from '../../UserContext';
 import ChallengeCard from '../../Components/Challenges_Post/ChallengeCard';
@@ -8,6 +8,9 @@ import userService from '../../Services/UserService';
 import { CircularProgress } from '@mui/material';
 
 const Feed = () => {
+  const { userId } = useParams(); // Get the user identifier from URL
+  console.log(userId)
+
   const [challenges, setChallenges] = useState([]);
   const [error, setError] = useState(null);
   const { user } = useContext(UserContext);
@@ -16,10 +19,12 @@ const Feed = () => {
   useEffect(() => {
     const fetchChallenges = async () => {
       try {
+        const profileUserId = userId || user.id; 
         const token = user?.token;
-        const response2 = await userService.getProfile(token);
-        const profileUserId = response2.data.user._id;
-        const data = await ChallengeService.getChallengesByFriends(profileUserId, token);
+        const response2 = await userService.getProfile(profileUserId, token);
+        // const profileUserId = response2.data.user._id;
+
+        const data = await ChallengeService.getChallengesByFriends(response2.data.user._id, token);
         if (data.status === 'ok') {
           const sortedChallenges = data.challenges.sort((a, b) => 
             new Date(b.createdAt) - new Date(a.createdAt)

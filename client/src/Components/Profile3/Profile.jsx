@@ -33,31 +33,34 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        const profileUserId = userId || user?.id; 
         const token = user?.token;
-        const response2 = await userService.getProfile(token);
-        const profileUserId3 = response2.data.user._id;
-        const responses = await ChallengeService.getChallengesByAuthor(profileUserId3, token);
+        const response = await userService.getProfile(profileUserId, token);
+
+        const responses = await ChallengeService.getChallengesByAuthor(response.data.user?.userId || response.data.user._id, token);
+
+
+        // Check if challenges data is available
         setNumberofPosts(responses.data.challenges?.length);
-        const profileUserId = userId || user.id; // Use URL userId or fallback to logged-in user's id
-        const response = await userService.getProfile(user.token);
         if (response.data.status === 'ok') {
-          setLoading(false)
+          setLoading(false);
           setProfileData(response.data.user);
           setEditData({
             name: response.data.user.name,
             email: response.data.user.email,
             about: response.data.user.about
-          }); // Set initial edit data
+          }); 
         }
       } catch (error) {
-        console.error("Error fetching profile", error);
+        console.error("Error in fetchProfile:", error);
       }
     };
+
     if (user && user.token) {
       fetchProfile();
     }
   }, [userId, user]);
-
+  
   const handleEditClick = () => {
     if (isEditing) {
       handleUpdate();

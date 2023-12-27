@@ -1,6 +1,8 @@
 const Challenge = require('../models/challenge.model'); 
 const CommentModel = require('../models/comment.model'); 
 const UserModel = require('../models/user.model'); 
+const mongoose = require('mongoose');
+
 // Create a new Challenge
 exports.createChallenge = async (req, res) => {
   try {
@@ -124,19 +126,46 @@ exports.getChallengesByTag = async (req, res) => {
   
   // Get Challenges by Author
   exports.getChallengesByAuthor = async (req, res) => {
+    console.log("getChallengesByAuthor called in backend");
+  
     try {
-      // Validate the authorId to make sure it's a valid ObjectId
-      const authorId = req.params.authorId;
+      
+      const authorId = req.params.authorId || req.user.id;
   
-      // Use ChallengeModel to find the documents and populate author's details
+      if (!mongoose.Types.ObjectId.isValid(authorId)) {
+        console.error("Invalid author ID in backend request");
+        return res.status(400).json({ error: 'Invalid author ID' });
+      }
+  
       const challenges = await Challenge.find({ author: authorId })
-                                         .populate('author', 'name profilePicture'); // Add this line
+                                        .populate('author', 'name profilePicture');
   
-      res.status(200).json({ challenges });
+      if (!challenges.length) {
+        return res.status(404).json({ error: 'No challenges found for this author' });
+      }
+  
+      
+      res.status(200).json({ status: 'ok', challenges });
     } catch (error) {
-      res.status(500).json({ message: "Error fetching challenges by author", error });
+      console.error(`Error in getChallengesByAuthor: ${error.message}`);
+      res.status(500).json({ error: 'Error fetching challenges by author', details: error.message });
     }
   };
+  
+  // exports.getChallengesByAuthor = async (req, res) => {
+  //   try {
+  //     // Validate the authorId to make sure it's a valid ObjectId
+  //     const authorId = req.params.authorId;
+  
+  //     // Use ChallengeModel to find the documents and populate author's details
+  //     const challenges = await Challenge.find({ author: authorId })
+  //                                        .populate('author', 'name profilePicture'); // Add this line
+  
+  //     res.status(200).json({ challenges });
+  //   } catch (error) {
+  //     res.status(500).json({ message: "Error fetching challenges by author", error });
+  //   }
+  // };
   
 
   exports.getChallengesByFriends = async (req, res) => {

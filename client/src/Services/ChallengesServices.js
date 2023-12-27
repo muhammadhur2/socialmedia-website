@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_BASE} from  '../global'
-const API_URL = "https://socialmedia-website-three.vercel.app/challenges";  // Replace with your API URL
-// const API_URL = "http://localhost:3001/challenges"
+// const API_URL = "https://socialmedia-website-three.vercel.app/challenges";  // Replace with your API URL
+const API_URL = "http://localhost:3001/challenges"
 
 class ChallengeService {
   
@@ -48,14 +48,35 @@ class ChallengeService {
   }
 
   // Get Challenges by Author
-  async getChallengesByAuthor(authorId, token) {
-    console.log("getChallengesByAuthorlog: ")
-    console.log(authorId)
-    console.log(token)
+  // async getChallengesByAuthor(authorId = '', token) {
+  //   const config = { headers: { Authorization: `Bearer ${token}` } };
+  //   const url = `${API_URL}/byAuthor/${authorId}`;
+  //   console.log(`Request URL for challenges: ${url}`);
+  //   console.log(`Authorization token for challenges: ${token}`);
+  
+  //   try {
+  //     const response = await axios.get(url, config);
+  //     console.log("Response from getChallengesByAuthor:", response);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error(`Error in getChallengesByAuthor (Client-Side):`, error);
+  //     throw error;
+  //   }
+  // }
 
+  async getChallengesByAuthor(authorId, token) {
+    console.log("getChallengesByAuthor called with Author ID:", authorId);
+    console.log("Token for request:", token);
+  
+    if (!authorId || !token) {
+      console.error("Missing author ID or token in getChallengesByAuthor");
+      return;
+    }
+  
     const config = { headers: { Authorization: `Bearer ${token}` } };
     return axios.get(`${API_URL}/byAuthor/${authorId}`, config);
   }
+  
 
   // Get Challenges by Complexity
   async getChallengesByComplexity(complexity, token) {
