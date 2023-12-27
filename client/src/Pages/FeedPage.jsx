@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AppBar_material from '../Components/AppBar_Material/AppBar';  // Adjust the path if needed
 import Feed from '../Components/Feed/Feed';  // Adjust the path if needed
 import TemporaryDrawer from '../Components/sidebar_material/sidebar';
+import RightSideBar from '../Components/RightSideBar/RightSideBar'
 
 const FeedPage = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -18,6 +19,7 @@ const FeedPage = () => {
       <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}> 
         <Feed />
       </div>
+      <RightSideBar/>
     </div>
   );
 };

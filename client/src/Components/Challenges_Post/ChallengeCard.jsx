@@ -1,6 +1,7 @@
 import React from 'react';
-import { Card, CardHeader, CardMedia, CardContent, CardActions, Typography, Button, Avatar, Box } from '@mui/material';
-import { Link } from 'react-router-dom'; // Import Link
+import { Card, CardHeader, CardMedia, CardContent, CardActions, Typography, Button, Avatar, Box, Chip } from '@mui/material';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp'; // Importing the thumbs-up icon
+import { Link } from 'react-router-dom';
 
 const ChallengeCard = ({
   title,
@@ -10,26 +11,25 @@ const ChallengeCard = ({
   description,
   complexity,
   buttonGroup,
-  readMoreLink
+  readMoreLink,
+  likesCount
 }) => {
   return (
     <Card 
       sx={{ 
         mt: 6,
-        width: '24rem', // Adjusted width to equivalent 96
-        boxShadow: 3, // Adds a stronger shadow to make the card "pop"
-        border: '1px solid', // Adds a border
-        borderColor: 'primary.main', // Use the theme's primary color for the border
-        bgcolor: 'background.paper', // A slight off-white color that stands out against a white background
+        width: '100%',
+        boxShadow: 3,
+        border: '1px solid',
+        borderColor: 'primary.main',
+        bgcolor: 'background.paper',
         '&:hover': {
-          boxShadow: 6, // Increases the shadow strength on hover for a "lifting" effect
+          boxShadow: 6,
         }
       }}
     >
       <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" src={avatarUrl || '/static/images/avatar/defaultAvatar.jpg'} />
-        }
+        avatar={<Avatar src={avatarUrl || '/static/images/avatar/defaultAvatar.jpg'} />}
         title={title}
         subheader={date}
       />
@@ -38,7 +38,7 @@ const ChallengeCard = ({
           component="img"
           height="194"
           image={imageUrl}
-          alt="Card Image"
+          alt={`${title} image`}
         />
       )}
       <CardContent>
@@ -50,36 +50,35 @@ const ChallengeCard = ({
             Complexity: {complexity}
           </Typography>
         )}
+        <Box display="flex" alignItems="center" sx={{ mt: 2 }}>
+          <Chip
+            icon={<ThumbUpIcon />}
+            label={likesCount || 0}
+            size="small"
+            variant="outlined"
+          />
+        </Box>
       </CardContent>
       <CardActions disableSpacing sx={{ justifyContent: 'start', flexWrap: 'wrap' }}>
-  {buttonGroup && buttonGroup.length > 0 && (
-    buttonGroup.map((buttonLabel, index) => (
-      <Link 
-        key={index} 
-        to={`/feed/tags/${buttonLabel}`} // Use template literals to insert the button label
-        style={{ textDecoration: 'none' }} // Optional: to remove the underline of links
-      >
-        <Button size="small" variant="outlined" sx={{ m: 0.5 }}>
-          {buttonLabel}
-        </Button>
-      </Link>
-    ))
-  )}
-</CardActions>
-{
-  /* <CardActions disableSpacing>
-        <Box width="100%" textAlign="center"> 
-          <Button size="small" variant="contained" onClick={() => window.location.href = readMoreLink}>Read More</Button>
+        {buttonGroup && buttonGroup.length > 0 && (
+          buttonGroup.map((buttonLabel, index) => (
+            <Link key={index} to={`/feed/tags/${buttonLabel}`} style={{ textDecoration: 'none', marginRight: '8px' }}>
+              <Chip label={buttonLabel} variant="outlined" color="primary" />
+            </Link>
+          ))
+        )}
+      </CardActions>
+      <CardActions disableSpacing>
+        <Box width="100%" textAlign="center">
+          <Button size="small" variant="contained" component={Link} to={readMoreLink}>Read More</Button>
         </Box>
-      </CardActions> */
-}
-      
+      </CardActions>
     </Card>
   );
 }
 
 ChallengeCard.defaultProps = {
-  avatarUrl: '/static/images/avatar/defaultAvatar.jpg', // Default avatar image path
+  avatarUrl: '/static/images/avatar/defaultAvatar.jpg',
 };
 
 export default ChallengeCard;
