@@ -246,7 +246,7 @@ const AppBar = ({ toggleDrawer }) => {
     <Box sx={{ flexGrow: 1 }}>
       <MuiAppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
-          <IconButton
+          {/* <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -255,13 +255,14 @@ const AppBar = ({ toggleDrawer }) => {
             onClick={() => toggleDrawer(true)}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
   
           <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
+            onClick={homePageNav}
           >
             SkillSphere
           </Typography>

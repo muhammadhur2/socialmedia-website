@@ -10,6 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
 import { useNavigate } from 'react-router-dom';
+import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 
 const drawerWidth = 240;
 
@@ -30,6 +31,7 @@ export default function PermanentDrawer() {
           <ListItem key={text} disablePadding>
             <ListItemButton onClick={() => handleNavigation('/' + text.toLowerCase().replace(/\s+/g, ''))}>
               <ListItemIcon>
+                {text === 'Feed' && <DynamicFeedIcon />}
                 {text === 'Friends' && <PeopleAltOutlinedIcon />}
                 {text === 'Create Challenge' && <FitnessCenterOutlinedIcon />}
               </ListItemIcon>
