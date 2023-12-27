@@ -3,6 +3,8 @@ const bcrypt = require('../utils/bcryptHelper.js');
 const jwt = require('../utils/jwtHelper');
 const { verifyToken } = require('../utils/jwtHelper');
 const { body, validationResult } = require('express-validator');
+const Challenge = require('../models/challenge.model.js'); // Adjust the path to your Challenge model
+
 
 exports.register = [
   body('name').trim().isLength({ min: 1 }).withMessage('Name is required'),
@@ -26,6 +28,18 @@ exports.register = [
         password: hashedPassword,
         profilePicture: imageUrl // Save the image URL with the user
       });
+
+      await Challenge.create({
+        title: 'Welcome!',
+        complexity: 'Bronze',
+        tags: [], // Assuming no tags for the welcome post
+        description: `Welcome to SkillSphere, ${newUser.name}! We're thrilled to have you join our community.`,
+        author: newUser._id, // The author is the newly created user
+        comments: [], // No comments initially
+        likes: [], // No likes initially
+        picture: 'https://skillsphere-pics.s3.amazonaws.com/welcome-message-examples-to-get-you-inspired.jpg' // Assuming no picture for the welcome post
+      });
+
 
       // Email sending logic
       const mailOptions = {
@@ -111,7 +125,8 @@ exports.getProfile = async (req, res) => {
       profileData = {
         userId,
         name: user.name,
-        email: user.email
+        email: user.email,
+        friend: user.friends
         // Add other fields that you want to be public
       };
     }

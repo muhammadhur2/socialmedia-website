@@ -240,7 +240,7 @@ export default function ProfilePage() {
                   <Grid item>
                     <Grid container justifyContent="flex-end" alignItems="center" textAlign="center" spacing={2}> {/* Adjust the spacing value as needed */}
                       <Grid item className={styles.statItem}>
-                        <Typography variant="h5">{profileData.friends?.length}</Typography>
+                        <Typography variant="h5">{ profileData.friends?.length || profileData.friend?.length || "0"}</Typography>
                         <Typography variant="caption">Friends</Typography>
                       </Grid>
                       <Grid item className={styles.statItem}>
