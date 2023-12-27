@@ -8,9 +8,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography'; // Import Typography for the title
 import { useNavigate } from 'react-router-dom';
-import UserContext from '../../UserContext'; // Import UserContext
-import UserService from '../../Services/UserService'; // Import UserService
+import UserContext from '../../UserContext';
+import UserService from '../../Services/UserService';
 
 const drawerWidth = 240;
 
@@ -49,7 +50,9 @@ export default function RightPermanentDrawer() {
         [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
       }}
     >
-      <Box sx={{ width: drawerWidth, pt: 10 }} role="presentation"> {/* Added padding-top here */}
+      <Box sx={{ width: drawerWidth, pt: '50pt' }} role="presentation">
+        <Typography variant="h6" sx={{ ml: 2, my: 2 }}>Contacts</Typography> {/* Title */}
+        <Divider />
         <List>
           {friends.map((friend) => (
             <ListItem key={friend._id} disablePadding>
@@ -62,7 +65,6 @@ export default function RightPermanentDrawer() {
             </ListItem>
           ))}
         </List>
-        <Divider />
       </Box>
     </Drawer>
   );
