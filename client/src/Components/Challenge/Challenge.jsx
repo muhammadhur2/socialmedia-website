@@ -4,7 +4,9 @@ import ChallengeService from '../../Services/ChallengesServices';
 import UserContext from '../../UserContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Challenge.css';
-import { CircularProgress, Tooltip, Box } from '@mui/material'; // Import Box for tooltip content
+import { CircularProgress, Tooltip, Box, Chip } from '@mui/material';
+import { Link } from 'react-router-dom';
+
 
 const ChallengeDetailPage = () => {
   const { challengeId } = useParams();
@@ -61,7 +63,7 @@ const ChallengeDetailPage = () => {
   };
 
   const getLikesTooltip = (likes) => {
-    return likes.map(user => <Box key={user._id}>{user.name}</Box>); // Each name in a Box component
+    return likes.map(user => <Box key={user._id}>{user.name}</Box>);
   };
 
   if (!user || !user.token) {
@@ -87,19 +89,31 @@ const ChallengeDetailPage = () => {
       )}
 
       <div className="card mb-4">
-        <div className="card-body">
+        <div className="card-body text-center">
           <h1 className="card-title display-4">{challenge.title}</h1>
-          <p className="card-text text-muted">Complexity: {challenge.complexity}</p>
-          <p className="card-text">Author: {challenge.author.name}</p>
-          <p className="card-text">Created At: {new Date(challenge.createdAt).toLocaleString()}</p>
-          <p className="card-text">Updated At: {new Date(challenge.updatedAt).toLocaleString()}</p>
+          <p className="card-text">{challenge.description}</p>
+          <p className="card-text text-muted">
+            <small>Created: {new Date(challenge.createdAt).toLocaleString()}</small> | 
+            <small> Updated: {new Date(challenge.updatedAt).toLocaleString()}</small>
+          </p>
+          <p className="card-text">
+            <strong>Author: </strong> 
+            <Link to={`/profile/${challenge.author._id}`} className="text-primary">
+              {challenge.author.name}
+            </Link>
+          </p>
+          <Box sx={{ my: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {challenge.tags.map((tag, index) => (
+              <Chip key={index} label={tag} variant="outlined" sx={{ m: 0.5 }} />
+            ))}
+          </Box>        
         </div>
       </div>
 
       <div className="d-flex justify-content-between align-items-center mb-3">
         <button className="btn btn-primary" onClick={handleLike}>Like</button>
         <Tooltip 
-          title={<Fragment>{getLikesTooltip(challenge.likes)}</Fragment>} // Display likes in a tooltip
+          title={<Fragment>{getLikesTooltip(challenge.likes)}</Fragment>}
           placement="top"
         >
           <span className="badge bg-secondary">Likes: {challenge.likes.length}</span>

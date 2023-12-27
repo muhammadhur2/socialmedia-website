@@ -44,7 +44,6 @@ const Feed = () => {
   }, [user]);
 
   const navigateToChallenge = (challengeId) => {
-    console.log(challengeId);
     navigate(`/challenge/${challengeId}`);
   };
 
@@ -76,7 +75,7 @@ const Feed = () => {
               complexity={challenge.complexity}
               buttonGroup={challenge.tags}
               imageUrl={challenge.picture || "https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"}
-              readMoreLink={`https://example.com/challenges/${challenge._id}`}
+              readMoreLink={`http://localhost:3000/challenge/${challenge._id}`}
               likesCount={challenge.likes.length} // Display the number of likes
             />
           </Box>
