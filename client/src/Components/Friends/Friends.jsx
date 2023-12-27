@@ -76,7 +76,7 @@ const FriendsPage = () => {
     }
 };
 
-
+  const defaultProfilePic = 'https://skillsphere-pics.s3.amazonaws.com/default-placeholder-profile-icon-avatar-gray-man-90197957.webp';
 
   const handleAcceptRequest = async (friendId) => {
     try {
@@ -117,6 +117,8 @@ const FriendsPage = () => {
       console.error("Error sending friend request", error);
     }
   };
+
+  
 
   return (
     <div className="friends-container">
@@ -181,6 +183,11 @@ const FriendsPage = () => {
     ) : (
         searchResults.map(result => (
             <div key={result._id} className="search-item">
+                <img 
+                    src={result.profilePicture || defaultProfilePic} 
+                    alt={result.name} 
+                    className="friend-profile-pic" 
+                />
                 <span 
                     className="search-result-name" 
                     onClick={() => navigateToProfile(result._id)}
