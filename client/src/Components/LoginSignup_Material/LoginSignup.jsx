@@ -156,13 +156,15 @@ export default function LoginSignup() {
                 id="password"
                 autoComplete="current-password"
               />
+              {action === "Signup" && (
               <input
       accept="image/*"
       type="file"
       id="profile-picture"
       name="image"
       style={{ marginTop: '20px' }}
-    />
+    />)}
+
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"

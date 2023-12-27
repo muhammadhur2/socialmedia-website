@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import ChallengeService from '../../Services/ChallengesServices';
 import UserContext from '../../UserContext';
 import ChallengeCard from '../../Components/Challenges_Post/ChallengeCard';
@@ -8,7 +8,10 @@ import { CircularProgress } from '@mui/material';
 
 import userService from '../../Services/UserService';
 
+
 const Feed = () => {
+  const { userId } = useParams(); // Get the user identifier from URL
+  console.log(userId)
   const [challenges, setChallenges] = useState([]);
   const [error, setError] = useState(null);
   const { user } = useContext(UserContext);
@@ -17,13 +20,13 @@ const Feed = () => {
   useEffect(() => {
     const fetchChallenges = async () => {
       try {
+
+        const profileUserId = userId || user.id; 
         const token = user?.token;
-        const response2 = await userService.getProfile(token);
-        const profileUserId = response2.data.user._id;
-        const response = await ChallengeService.getChallengesByAuthor(profileUserId, token);
-        const numberofPosts= response.data.challenges.length;
-        console.log("Atta kaisa hai");
-        console.log(response);
+        const response2 = await userService.getProfile(profileUserId, token);
+        
+        const response = await ChallengeService.getChallengesByAuthor(response2.data.user?.userId || response2.data.user._id, token);
+
         if (response.status === 200) { // Check for status 200 instead of 'ok'
           const sortedChallenges = response.data.challenges.sort((a, b) => 
             new Date(b.createdAt) - new Date(a.createdAt)
@@ -37,10 +40,10 @@ const Feed = () => {
       }
     };
 
-    if (user?.token) {
+    if (user && user.token) {
       fetchChallenges();
     }
-  }, [user]);
+  }, [userId, user]);
 
   const navigateToChallenge = (challengeId) => {
     console.log(challengeId);

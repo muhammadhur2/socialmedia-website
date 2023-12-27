@@ -76,11 +76,13 @@ exports.getProfile = async (req, res) => {
     } else {
       // Define the public data fields you want to expose
       profileData = {
+        userId,
         name: user.name,
         email: user.email
         // Add other fields that you want to be public
       };
     }
+    console.log("Profile Data:", profileData);
 
     res.json({ status: 'ok', user: profileData });
   } catch (err) {
