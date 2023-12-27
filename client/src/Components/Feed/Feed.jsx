@@ -57,29 +57,31 @@ const Feed = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: '600px', mx: 'auto', my: 2 }}>
-      {error && <p>Error: {error}</p>}
+    <Box sx={{ maxWidth: '600px', mx: 'auto', my: 2, pt: 2, boxShadow: '0 6px 15px rgba(0, 0, 0, 0.2)' }}>
+      {error && <p style={{ color: 'red', textAlign: 'center' }}>Error: {error}</p>}
       {!error && challenges.length > 0 ? (
         challenges.map((challenge) => (
           <Box key={challenge._id} sx={{ my: 2 }} onClick={() => navigateToChallenge(challenge._id)} style={{ cursor: 'pointer' }}>
             <ChallengeCard
               title={`${challenge.title} - ${timeSince(challenge.createdAt)}`}
-              author={challenge.authorName} // Replace with the actual property name for the author's name
+              author={challenge.authorName}
               date={challenge.author.name}
               avatarUrl={challenge.author.profilePicture || "https://example.com/path-to-avatar.jpg"}
               description={challenge.description || "No description available."}
               complexity={challenge.complexity}
               buttonGroup={challenge.tags}
               imageUrl={challenge.picture || "https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"}
-              readMoreLink={`https://example.com/challenges/${challenge._id}`} // Replace with actual link to challenge
+              readMoreLink={`https://example.com/challenges/${challenge._id}`}
+              likesCount={challenge.likes.length} // Display the number of likes
             />
           </Box>
         ))
       ) : (
-        !error && <CircularProgress />
+        !error && <CircularProgress style={{ display: 'block', margin: '0 auto' }} />
       )}
     </Box>
   );
+  
 };
 
 export default Feed;

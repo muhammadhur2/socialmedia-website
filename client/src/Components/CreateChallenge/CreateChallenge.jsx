@@ -108,7 +108,6 @@ import ChallengeService from '../../Services/ChallengesServices';
 import UserContext from '../../UserContext';
 import { AppBar, Toolbar, Typography, Container, TextField, Button, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 
-
 const CreateChallengePage = () => {
   const [title, setTitle] = useState('');
   const [complexity, setComplexity] = useState('Bronze');
@@ -125,13 +124,15 @@ const CreateChallengePage = () => {
     formData.append('title', title);
     formData.append('complexity', complexity);
     formData.append('description', description);
+    
     const tagsArray = tags.split(',').map(tag => tag.trim());
-    formData.append('tags', JSON.stringify(tagsArray));
+    tagsArray.forEach(tag => {
+      formData.append('tags', tag);
+    });
+    
     if (selectedImage) {
       formData.append('picture', selectedImage);
     }
-
-
 
     try {
       const response = await ChallengeService.createChallenge(formData, user.token);
@@ -157,87 +158,85 @@ const CreateChallengePage = () => {
 
   return (
     <Box>
-        <AppBar position="static">
-            <Toolbar>
-                <Typography variant="h8" component="div" sx={{ flexGrow: 1 }}>
-                    Create Challenge
-                </Typography>
-            </Toolbar>
-        </AppBar>
-        <Container maxWidth="sm" sx={{ marginTop: 8 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Typography component="h2" variant="h5" sx={{ mt: 4, mb: 2 }}> {/* Title above the form */}
-                    Create a Challenge
-                </Typography>
-                {error && <Typography color="error">{error}</Typography>}
-                {success && <Typography color="success.main">{success}</Typography>}
-                <Box component="form" onSubmit={handleCreateChallenge} noValidate sx={{ mt: 1 }}>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        label="Title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel>Complexity</InputLabel>
-                        <Select
-                            value={complexity}
-                            label="Complexity"
-                            onChange={(e) => setComplexity(e.target.value)}
-                        >
-                            <MenuItem value="Bronze">Bronze</MenuItem>
-                            <MenuItem value="Silver">Silver</MenuItem>
-                            <MenuItem value="Gold">Gold</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <TextField
-                        margin="normal"
-                        fullWidth
-                        label="Tags (comma-separated)"
-                        value={tags}
-                        onChange={(e) => setTags(e.target.value)}
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        label="Description"
-                        multiline
-                        rows={4}
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                    <Button
-                        variant="contained"
-                        component="label"
-                        fullWidth
-                        sx={{ mt: 2, mb: 2 }}
-                    >
-                        Upload Image
-                        <input
-                            type="file"
-                            hidden
-                            accept="image/*"
-                            onChange={handleImageChange}
-                        />
-                    </Button>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        Create Challenge
-                    </Button>
-                </Box>
-            </Box>
-        </Container>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Create Challenge
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="sm" sx={{ marginTop: 8 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Typography component="h2" variant="h5" sx={{ mt: 4, mb: 2 }}>
+            Create a Challenge
+          </Typography>
+          {error && <Typography color="error">{error}</Typography>}
+          {success && <Typography color="success.main">{success}</Typography>}
+          <Box component="form" onSubmit={handleCreateChallenge} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Complexity</InputLabel>
+              <Select
+                value={complexity}
+                label="Complexity"
+                onChange={(e) => setComplexity(e.target.value)}
+              >
+                <MenuItem value="Bronze">Bronze</MenuItem>
+                <MenuItem value="Silver">Silver</MenuItem>
+                <MenuItem value="Gold">Gold</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              margin="normal"
+              fullWidth
+              label="Tags (comma-separated)"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Description"
+              multiline
+              rows={4}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <Button
+              variant="contained"
+              component="label"
+              fullWidth
+              sx={{ mt: 2, mb: 2 }}
+            >
+              Upload Image
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Create Challenge
+            </Button>
+          </Box>
+        </Box>
+      </Container>
     </Box>
-);
-
-
+  );
 };
 
 export default CreateChallengePage;
