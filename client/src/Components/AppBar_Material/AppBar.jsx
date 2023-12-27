@@ -1,26 +1,31 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import MuiAppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
+import {
+  AppBar as MuiAppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  InputBase,
+  Badge,
+  MenuItem,
+  Menu,
+  Avatar,
+  CircularProgress,
+  Popover
+} from '@mui/material';
+import {
+  Menu as MenuIcon,
+  Search as SearchIcon,
+  AccountCircle,
+  Mail as MailIcon,
+  Notifications as NotificationsIcon,
+  MoreVert as MoreIcon
+} from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import UserContext from '../../UserContext'; // Adjust path as needed
+import UserContext from '../../UserContext';
 import userService from '../../Services/UserService';
-import { CircularProgress } from '@mui/material';
 
-// Search component styles
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -51,7 +56,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -61,16 +65,28 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-
-// AppBar component
-const AppBar = ( {toggleDrawer} ) => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const navigate = useNavigate();
-  const { setUser } = React.useContext(UserContext);
+const AppBar = ({ toggleDrawer }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [searchPopoverAnchorEl, setSearchPopoverAnchorEl] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isSearchPopoverOpen = Boolean(searchPopoverAnchorEl);
+
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
+
+  useEffect(() => {
+    if (searchResults.length > 0) {
+      setSearchPopoverAnchorEl(searchTerm ? document.getElementById('search-input') : null);
+    } else {
+      setSearchPopoverAnchorEl(null);
+    }
+  }, [searchResults, searchTerm]);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -95,8 +111,36 @@ const AppBar = ( {toggleDrawer} ) => {
     navigate('/login');
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  
+    // Anchor the Popover only if it's not already open
+    if (!isSearchPopoverOpen) {
+      setSearchPopoverAnchorEl(event.currentTarget);
+    }
+  };
+  
+
+  const handleSearch = async () => {
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem('token');
+      const response = await userService.searchFriends(token, searchTerm);
+      console.log(response.data.users);
+      setSearchResults(response.data.users);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error fetching search results', error);
+      setIsLoading(false);
+    }
+  };
+
+  const handleSearchPopoverClose = () => {
+    setSearchPopoverAnchorEl(null);
+  };
+
   const profileredirect = () => {
-    navigate('/profile');
+    navigate('/profile'); // Adjust the path as needed based on your routing setup
   };
 
   const menuId = 'primary-search-account-menu';
@@ -175,39 +219,34 @@ const AppBar = ( {toggleDrawer} ) => {
     
   );
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
+
+  const handleKeyPress = async (event) => {
+    if (event.key === 'Enter') {
+      try {
+        setIsLoading(true);
+        const token = localStorage.getItem('token');
+        const response = await userService.searchFriends(token, searchTerm);
+        setSearchResults(response.data.users);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching search results', error);
+        setIsLoading(false);
+      }
+    }
   };
-
 
   const homePageNav = () => {
     navigate('/');
   };
-
-  const handleSearch = async () => {
-    try {
-      setIsLoading(true);
-      const token = localStorage.getItem('token'); // Ensure you have the token
-      const response = await userService.searchFriends(token, searchTerm);
-      setSearchResults(response.data.users); // Access the 'users' key from the response
-    } catch (error) {
-      console.error('Error fetching search results', error);
-      // Handle error appropriately
-    } finally {
-      setIsLoading(false);
-    }
-  };
   
-
+  const searchPopoverId = isSearchPopoverOpen ? 'search-popover' : undefined;
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <MuiAppBar position="fixed" sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>        <Toolbar>
-          {/* <IconButton
+      <MuiAppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Toolbar>
+          <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -216,44 +255,33 @@ const AppBar = ( {toggleDrawer} ) => {
             onClick={() => toggleDrawer(true)}
           >
             <MenuIcon />
-          </IconButton> */}
+          </IconButton>
+  
           <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
-            onClick={homePageNav}
           >
             SkillSphere
           </Typography>
+  
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-        placeholder="Search Friends…"
-        inputProps={{ 'aria-label': 'search' }}
-        value={searchTerm}
-        onChange={handleSearchChange}
-        onKeyPress={(event) => {
-          if (event.key === 'Enter') {
-            handleSearch();
-          }
-        }}
-      />
-      {isLoading && <CircularProgress />}
-      {/* Render your search results here */}
-          <div>
-            {searchResults.map(user => (
-              <div key={user._id}>
-                <p>Name: {user.name}</p>
-                <p>Email: {user.email}</p>
-              </div>
-            ))}
-          </div>
-
+              id="search-input"
+              placeholder="Search Friends…"
+              inputProps={{ 'aria-label': 'search' }}
+              value={searchTerm}
+              onChange={handleSearchChange}
+              onKeyPress={handleKeyPress}
+            />
           </Search>
+  
           <Box sx={{ flexGrow: 1 }} />
+  
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
@@ -281,6 +309,7 @@ const AppBar = ( {toggleDrawer} ) => {
               <AccountCircle />
             </IconButton>
           </Box>
+          
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -297,9 +326,37 @@ const AppBar = ( {toggleDrawer} ) => {
       </MuiAppBar>
       {renderMobileMenu}
       {renderMenu}
-      
+  
+      <Popover
+        id={searchPopoverId}
+        open={Boolean(searchPopoverAnchorEl)}
+        anchorEl={searchPopoverAnchorEl}
+        onClose={handleSearchPopoverClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <Box sx={{ p: 2 }}>
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            searchResults.map((user) => (
+              <MenuItem key={user._id} onClick={() => navigate(`/profile/${user._id}`)}>
+                <Avatar src={user.profilePicture} sx={{ width: 24, height: 24, mr: 2 }} />
+                {user.name}
+              </MenuItem>
+            ))
+          )}
+        </Box>
+      </Popover>
     </Box>
   );
+  
 };
 
 export default AppBar;

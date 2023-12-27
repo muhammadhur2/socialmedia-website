@@ -206,3 +206,11 @@ button.friend-action.reject:hover {
 .request-item button.reject:hover {
   background-color: darken(#f44336, 10%); /* Hover color for reject button */
 }
+
+.friend-profile-pic {
+  width: 40px;  /* Adjust the size as needed */
+  height: 40px; /* Adjust the size as needed */
+  border-radius: 50%; /* Makes the image circular */
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+  margin-right: 10px; /* Adds some space between the image and the name */
+}

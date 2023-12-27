@@ -52,7 +52,7 @@ const FriendsPage = () => {
 
   const handleSearch = async () => {
     const token = user?.token;
-    const response2 = await userService.getProfile(token);
+    const response2 = await userService.getProfile(user?.id, token);
     console.log(response2.data.user._id)
     if (!searchQuery) {
         return; // Optionally handle empty search query
@@ -131,14 +131,18 @@ const FriendsPage = () => {
 
 
 
-      <div className="friends-list">
+         <div className="friends-list">
         <h2>My Friends</h2>
         {friends.map(friend => (
           <div key={friend._id} className="friend-item">
+            <img 
+              src={friend.profilePicture || 'https://skillsphere-pics.s3.amazonaws.com/default-placeholder-profile-icon-avatar-gray-man-90197957.webp'} 
+              alt={friend.name} 
+              className="friend-profile-pic" 
+            />
             <span 
               className="friend-name" 
               onClick={() => navigateToProfile(friend._id)}
-              style={{ cursor: 'pointer', textDecoration: 'underline' }}
             >
               {friend.name}
             </span>
