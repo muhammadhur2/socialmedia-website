@@ -183,6 +183,11 @@ const AppBar = ( {toggleDrawer} ) => {
     setSearchTerm(event.target.value);
   };
 
+
+  const homePageNav = () => {
+    navigate('/');
+  };
+
   const handleSearch = async () => {
     try {
       setIsLoading(true);
@@ -217,6 +222,7 @@ const AppBar = ( {toggleDrawer} ) => {
             noWrap
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
+            onClick={homePageNav}
           >
             SkillSphere
           </Typography>

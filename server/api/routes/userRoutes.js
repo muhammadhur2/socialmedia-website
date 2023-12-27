@@ -5,9 +5,11 @@ const { verifyToken } = require('../utils/jwtHelper');
 const { updateProfile, getProfile, deleteAccount } = require('../controllers/userController');
 const imageUploadController = require('../controllers/imageUploadController'); // Adjust the path
 const upload = require('../utils/uploads'); // Import the Multer configuration
+const emailMiddleware = require('../utils/emailMiddleware'); // Import the email middleware
 
 
-router.post('/register', (req, res, next) => {
+
+router.post('/register', emailMiddleware, (req, res, next) => {
     console.log("Incoming request body:", req.body);
     console.log("Incoming files:", req.files); // This might be undefined at this point
     next();

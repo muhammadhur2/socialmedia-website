@@ -36,7 +36,7 @@ export default function RightPermanentDrawer() {
   }, [user]);
 
   const handleNavigation = (friendId) => {
-    navigate(`/friend/${friendId}`);
+    navigate(`/profile/${friendId}`);
   };
 
   return (

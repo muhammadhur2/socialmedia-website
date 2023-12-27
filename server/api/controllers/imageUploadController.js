@@ -2,15 +2,18 @@ const upload = require('../utils/uploads'); // Adjust the path based on your fol
 
 exports.uploadImage = (req, res, next) => {
     console.log("File in uploadImage controller:", req.file);
-    if (!req.file) {
-        console.error('No file uploaded!');
-        return res.status(400).send({ message: 'No file selected!' });
+
+    if (req.file && req.file.location) {
+        // If a file is uploaded, set the file URL
+        req.fileUrl = req.file.location;
+    } else {
+        // If no file is uploaded, set the file URL to null or an empty string
+        console.log('No file uploaded, proceeding without a file.');
+        req.fileUrl = null; // or use an empty string if that suits your logic better
     }
 
-    const fileUrl = req.file.location; // The location (URL) of the file in S3
-
-    // Attach file URL to request and pass control to next middleware/controller
-    req.fileUrl = fileUrl;
+    // Pass control to the next middleware/controller
     next();
 };
+
 
