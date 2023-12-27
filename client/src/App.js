@@ -8,6 +8,7 @@ import ChallengePage from './Pages/ChallengePage';  // Adjust the path if needed
 import CreateChallengePage from './Pages/CreateChallengePage';
 import ListChallengesPage from './Pages/ListChallengesPage';
 import UserContext from './UserContext';  // import UserContext
+import EditChallengePage from './Pages/EditChallengePage'; // Adjust the path if needed
 
 import FeedPage from './Pages/FeedPage'; // Make sure this path is correct
 import TagFeedPage from './Pages/TagFeedPage'; // Import the TagFeedPage component
@@ -29,6 +30,14 @@ function App() {
             element={
               <PrivateRoute>
                 <ProfilePage />
+              </PrivateRoute>
+            } 
+          />
+      <Route 
+            path="/editchallenge/:challengeId" 
+            element={
+              <PrivateRoute>
+                <EditChallengePage />
               </PrivateRoute>
             } 
           />

@@ -33,7 +33,7 @@ class ChallengeService {
   async updateChallenge(id, updateData, token) {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     return axios.put(`${API_URL}/update/${id}`, updateData, config);
-  }z
+  }
 
   // Delete Challenge by ID
   async deleteChallenge(id, token) {
